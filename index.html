@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAACG0PgAAAAAAABVmgA6l8gAUarZAESErwBiuukAPmmGAAE3bQAud50AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERERERERERERERERERiIgRERERERh1WYgRERERiVNDOYgRERGDVkRTmYERESRgBEQ5mBERI2AGREN4ERESRmZEQzgREREpVENEMhERERIilDUhEREREREiIhERERERERERERERERERERERERERERERERERERERERERERH//wAA//8AAPD/AADgPwAAwA8AAMAHAADAAwAAwAMAAOADAADwAwAA+AcAAP8PAAD//wAA//8AAP//AAD//wAA" rel="icon" type="image/x-icon">
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAACG0PgAAAAAAABVmgA6l8gAUarZAESErwBiuukAPmmGAAE3bQAud50AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERERERERERERERERERiIgRERERERh1WYgRERERiVNDOYgRERGDVkRTmYERESRgBEQ5mBERI2AGREN4ERESRmZEQzgREREpVENEMhERERIilDUhEREREREiIhERERERERERERERERERERERERERERERERERERERERERH//wAA//8AAPD/AADgPwAAwA8AAMAHAADAAwAAwAMAAOADAADwAwAA+AcAAP8PAAD//wAA//8AAP//AAD//wAA" rel="icon" type="image/x-icon">
 <style>
 *, *::before, *::after {
   box-sizing: border-box;
@@ -25,7 +25,6 @@
   --border: rgba(78, 204, 163, 0.22);
   --text: #d4f0e8;
   --text-muted: #7ab8a4;
-  --red-deep: #0a0a0a;
 }
 
 html, body {
@@ -114,6 +113,24 @@ canvas#bg {
 .avatar:hover {
   box-shadow: 0 0 0 2px var(--mint), 0 0 18px var(--mint-glow);
 }
+
+.avatar-status {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid var(--card-bg);
+  background: #747f8d;
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+  z-index: 2;
+}
+
+.avatar-status.online  { background: #43b77a; box-shadow: 0 0 6px #43b77a; }
+.avatar-status.idle    { background: #faa61a; box-shadow: 0 0 6px #faa61a; }
+.avatar-status.dnd     { background: #f04747; box-shadow: 0 0 6px #f04747; }
+.avatar-status.offline { background: #747f8d; box-shadow: none; }
 
 .name-row {
   display: flex;
@@ -273,62 +290,22 @@ canvas#bg {
   margin-bottom: 18px;
 }
 
-.status-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #43b77a;
-  box-shadow: 0 0 6px #43b77a;
-  flex-shrink: 0;
-  animation: pulse 2.2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-.status-text {
+.activity-text {
   font-size: 11px;
   color: var(--text-muted);
   letter-spacing: 0.04em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.online-since {
+.disturb-label {
   margin-left: auto;
   font-size: 10px;
   color: var(--text-muted);
   opacity: 0.5;
   letter-spacing: 0.04em;
-}
-
-.links-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 18px;
-}
-
-.link-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: var(--mint-faint);
-  font-size: 11px;
-  color: var(--mint);
-  text-decoration: none;
-  letter-spacing: 0.06em;
-  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-  cursor: pointer;
-}
-
-.link-pill:hover {
-  border-color: var(--mint);
-  box-shadow: 0 0 12px var(--mint-glow);
-  background: rgba(78,204,163,0.14);
+  flex-shrink: 0;
 }
 
 .pet {
@@ -340,7 +317,6 @@ canvas#bg {
   flex-direction: column;
   align-items: center;
   user-select: none;
-  position: fixed;
 }
 
 .pet-bubble {
@@ -396,10 +372,8 @@ canvas#bg {
 }
 
 @media (max-width: 600px) {
-  .pet {
-    right: 50%;
-    transform: translateX(50%);
-    bottom: 16px;
+  canvas#bg {
+    display: none;
   }
 
   .works-grid {
@@ -434,6 +408,20 @@ canvas#bg {
   letter-spacing: 0.08em;
   margin-bottom: 2px;
 }
+
+.avatar-skeleton {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #0d1a14 25%, #132418 50%, #0d1a14 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 </style>
 </head>
 <body>
@@ -450,8 +438,11 @@ canvas#bg {
     <div class="profile-area">
       <div class="avatar-wrap">
         <div class="avatar">
-          <img src="images/avatar.jpg" id="avatarImg" alt="avatar" style="width:100%;height:100%;object-fit:cover">
+          <div class="avatar-skeleton" id="avatarSkeleton"></div>
+          <img src="images/avatar.jpg" id="avatarImg" alt="avatar"
+               style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity 0.4s;">
         </div>
+        <div class="avatar-status offline" id="avatarStatus"></div>
       </div>
 
       <div class="name-row">
@@ -481,9 +472,8 @@ canvas#bg {
     <div class="card-body">
 
       <div class="status-bar">
-        <div class="status-dot"></div>
-        <div class="status-text">online and very bored</div>
-        <div class="online-since">disturb me</div>
+        <div class="activity-text" id="activityText">online and very bored</div>
+        <div class="disturb-label">disturb me</div>
       </div>
 
       <div class="divider"></div>
@@ -507,7 +497,6 @@ canvas#bg {
         </div>
       </div>
 
-
     </div>
   </div>
 </div>
@@ -515,7 +504,7 @@ canvas#bg {
 <div class="pet" id="pet">
   <div class="pet-bubble" id="petBubble">hewwo :3</div>
   <div class="pet-body">
-    <img src="images/cat1.png" alt="pet" id="petImg" data-hover="images/cat2.png">
+    <img src="images/cat1.png" alt="pet" id="petImg">
   </div>
 </div>
 
@@ -523,96 +512,146 @@ canvas#bg {
 const canvas = document.getElementById('bg');
 const ctx = canvas.getContext('2d');
 let W, H, dots = [], mouse = { x: -999, y: -999 };
-const isMobile = window.matchMedia('(max-width:600px)').matches;
 
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
-
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
 function makeDots() {
   dots = [];
   let count = Math.floor((W * H) / 9000);
   for (let i = 0; i < count; i++) {
-    dots.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      ox: 0,
-      oy: 0,
-      r: Math.random() * 2 + 1,
-      base: Math.random() * 0.18 + 0.06
-    });
+    dots.push({ x: Math.random()*W, y: Math.random()*H, ox:0, oy:0, r: Math.random()*2+1, base: Math.random()*0.18+0.06 });
   }
 }
-
 function drawBg() {
-  let grad = ctx.createRadialGradient(W * 0.3, H * 0.2, 0, W * 0.5, H * 0.5, Math.max(W, H));
-  grad.addColorStop(0, '#080d0b');
-  grad.addColorStop(0.45, '#060a08');
-  grad.addColorStop(0.8, '#040807');
-  grad.addColorStop(1, '#030605');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, W, H);
+  let grad = ctx.createRadialGradient(W*0.3, H*0.2, 0, W*0.5, H*0.5, Math.max(W,H));
+  grad.addColorStop(0,'#080d0b'); grad.addColorStop(0.45,'#060a08');
+  grad.addColorStop(0.8,'#040807'); grad.addColorStop(1,'#030605');
+  ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
 }
-
-function lerp(a, b, t) { return a + (b - a) * t; }
-
+function lerp(a,b,t){ return a+(b-a)*t; }
 function loop() {
   drawBg();
   const radius = 120;
   for (let d of dots) {
-    let dx = d.x - mouse.x;
-    let dy = d.y - mouse.y;
-    let dist = Math.sqrt(dx * dx + dy * dy);
-    let targetOx = 0, targetOy = 0;
-    if (!isMobile && dist < radius) {
-      let force = (1 - dist / radius) * 18;
-      targetOx = (dx / dist) * force;
-      targetOy = (dy / dist) * force;
-    }
-    d.ox = lerp(d.ox, targetOx, 0.08);
-    d.oy = lerp(d.oy, targetOy, 0.08);
-    let alpha = d.base + (Math.abs(d.ox) + Math.abs(d.oy)) * 0.012;
-    ctx.beginPath();
-    ctx.arc(d.x + d.ox, d.y + d.oy, d.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(78,204,163,${Math.min(alpha, 0.55)})`;
-    ctx.fill();
+    let dx=d.x-mouse.x, dy=d.y-mouse.y, dist=Math.sqrt(dx*dx+dy*dy);
+    let tox=0, toy=0;
+    if (dist<radius) { let f=(1-dist/radius)*18; tox=(dx/dist)*f; toy=(dy/dist)*f; }
+    d.ox=lerp(d.ox,tox,0.08); d.oy=lerp(d.oy,toy,0.08);
+    let alpha=d.base+(Math.abs(d.ox)+Math.abs(d.oy))*0.012;
+    ctx.beginPath(); ctx.arc(d.x+d.ox, d.y+d.oy, d.r, 0, Math.PI*2);
+    ctx.fillStyle=`rgba(78,204,163,${Math.min(alpha,0.55)})`; ctx.fill();
   }
   requestAnimationFrame(loop);
 }
+window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+window.addEventListener('resize', ()=>{ resize(); makeDots(); });
+resize(); makeDots(); loop();
 
-window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-window.addEventListener('resize', () => { resize(); makeDots(); });
-resize();
-makeDots();
-loop();
-
-const msgs = [
-  'hewwo :3', 'purrr', 'mrrrow~', 'pet me!!', '*bonks u*',
-  'bored too?', 'meow meow', '*kneads*', 'i luv u', 'fuck you'
-];
+const msgs = ['hewwo :3','purrr','mrrrow~','pet me!!','*bonks u*','bored too?','meow meow','*kneads*','i luv u','fuck you'];
 let lastMsg = 0;
 const pet = document.getElementById('pet');
 const bubble = document.getElementById('petBubble');
 let bubbleTimeout;
 
 pet.addEventListener('click', function() {
-  let idx = (lastMsg + 1) % msgs.length;
-  lastMsg = idx;
-  bubble.textContent = msgs[idx];
-  bubble.classList.add('show');
-  clearTimeout(bubbleTimeout);
-  bubbleTimeout = setTimeout(() => bubble.classList.remove('show'), 2400);
+  let idx=(lastMsg+1)%msgs.length; lastMsg=idx;
+  bubble.textContent=msgs[idx]; bubble.classList.add('show');
+  clearTimeout(bubbleTimeout); bubbleTimeout=setTimeout(()=>bubble.classList.remove('show'),2400);
 });
-
 pet.addEventListener('mouseenter', function() {
   if (!bubble.classList.contains('show')) {
-    bubble.textContent = msgs[lastMsg];
-    bubble.classList.add('show');
-    clearTimeout(bubbleTimeout);
-    bubbleTimeout = setTimeout(() => bubble.classList.remove('show'), 2000);
+    bubble.textContent=msgs[lastMsg]; bubble.classList.add('show');
+    clearTimeout(bubbleTimeout); bubbleTimeout=setTimeout(()=>bubble.classList.remove('show'),2000);
   }
 });
+
+const DISCORD_ID = '750971511401218078';
+const activityText   = document.getElementById('activityText');
+const avatarImg      = document.getElementById('avatarImg');
+const avatarSkeleton = document.getElementById('avatarSkeleton');
+const avatarStatus   = document.getElementById('avatarStatus');
+
+const STATUS_CLASSES = ['online','idle','dnd','offline'];
+
+function setStatus(status) {
+  STATUS_CLASSES.forEach(c => avatarStatus.classList.remove(c));
+  avatarStatus.classList.add(status);
+}
+
+function setActivity(data) {
+  const acts = data.activities ?? [];
+  const rich = acts.find(a => a.type === 0);
+  const custom = acts.find(a => a.type === 4);
+
+  if (rich) {
+    activityText.textContent = '🎮 ' + rich.name;
+  } else if (custom && custom.state) {
+    activityText.textContent = custom.state;
+  } else {
+    activityText.textContent = 'online and very bored';
+  }
+}
+
+function applyLanyardData(d) {
+  if (d.discord_user) {
+    const u = d.discord_user;
+    if (u.avatar) {
+      const ext = u.avatar.startsWith('a_') ? 'gif' : 'png';
+      const url = `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.${ext}?size=128`;
+      const img = new Image();
+      img.onload = () => {
+        avatarImg.src = url;
+        avatarImg.style.opacity = '1';
+        avatarSkeleton.style.display = 'none';
+      };
+      img.onerror = () => {
+        avatarImg.style.opacity = '1';
+        avatarSkeleton.style.display = 'none';
+      };
+      img.src = url;
+    } else {
+      avatarImg.style.opacity = '1';
+      avatarSkeleton.style.display = 'none';
+    }
+  }
+
+  setStatus(d.discord_status ?? 'offline');
+  setActivity(d);
+}
+
+function connectLanyard() {
+  const ws = new WebSocket('wss://api.lanyard.rest/socket');
+  let heartbeatInterval;
+
+  ws.addEventListener('message', e => {
+    const msg = JSON.parse(e.data);
+    if (msg.op === 1) {
+      heartbeatInterval = setInterval(() => ws.send(JSON.stringify({ op: 3 })), msg.d.heartbeat_interval);
+      ws.send(JSON.stringify({ op: 2, d: { subscribe_to_id: DISCORD_ID } }));
+    }
+    if (msg.op === 0) {
+      applyLanyardData(msg.d);
+    }
+  });
+
+  ws.addEventListener('close', () => {
+    clearInterval(heartbeatInterval);
+    setTimeout(connectLanyard, 5000);
+    setStatus('offline');
+    activityText.textContent = 'online and very bored';
+  });
+
+  ws.addEventListener('error', () => ws.close());
+}
+
+fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
+  .then(r => r.json())
+  .then(json => { if (json.success) applyLanyardData(json.data); })
+  .catch(() => {
+    avatarImg.style.opacity = '1';
+    avatarSkeleton.style.display = 'none';
+    setStatus('offline');
+  })
+  .finally(() => connectLanyard());
 </script>
 </body>
 </html>
