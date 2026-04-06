@@ -3,72 +3,617 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Exi's Home</title>
+<title>exi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+:root {
+  --mint: #4ecca3;
+  --mint-dim: #2a9d7a;
+  --mint-glow: rgba(78, 204, 163, 0.35);
+  --mint-faint: rgba(78, 204, 163, 0.08);
+  --black: #0a0a0a;
+  --card-bg: rgba(10, 12, 11, 0.92);
+  --border: rgba(78, 204, 163, 0.22);
+  --text: #d4f0e8;
+  --text-muted: #7ab8a4;
+  --red-deep: #0a0a0a;
+}
+
+html, body {
+  min-height: 100%;
+  font-family: 'Space Mono', monospace;
+  background: var(--black);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+canvas#bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.page-wrap {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px 120px;
+}
+
+.card {
+  width: 100%;
+  max-width: 640px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(78,204,163,0.06), 0 0 0 1px var(--border);
+  margin-top: 48px;
+  backdrop-filter: blur(18px);
+}
+
+.banner {
+  width: 100%;
+  height: 148px;
+  background: linear-gradient(135deg, #060d09 0%, #080d0b 50%, #061210 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 18px,
+    rgba(78,204,163,0.03) 18px,
+    rgba(78,204,163,0.03) 19px
+  );
+}
+
+.profile-area {
+  padding: 0 24px;
+  position: relative;
+}
+
+.avatar-wrap {
+  position: relative;
+  display: inline-block;
+  margin-top: -44px;
+}
+
+.avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 4px solid var(--card-bg);
+  background: linear-gradient(135deg, #0d1a14 0%, #0a2018 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow 0.3s ease;
+}
+
+.avatar:hover {
+  box-shadow: 0 0 0 2px var(--mint), 0 0 18px var(--mint-glow);
+}
+
+.name-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.name-block h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.pronouns {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  letter-spacing: 0.08em;
+}
+
+.badges {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: var(--mint-faint);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  overflow: visible;
+}
+
+.badge:hover {
+  border-color: var(--mint);
+  box-shadow: 0 0 10px var(--mint-glow);
+}
+
+.badge-img {
+  width: 23px;
+  height: 23px;
+  object-fit: contain;
+}
+
+.badge-tip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0a0a0a;
+  border: 1px solid var(--mint-dim);
+  color: var(--mint);
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s;
+  letter-spacing: 0.05em;
+  font-family: 'Space Mono', monospace;
+}
+
+.badge-tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--mint-dim);
+}
+
+.badge:hover .badge-tip {
+  opacity: 1;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 18px 0;
+}
+
+.bio-text {
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--text);
+  opacity: 0.88;
+}
+
+.section-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--mint-dim);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.works-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.works-empty {
+  font-size: 12px;
+  color: var(--text-muted);
+  opacity: 0.5;
+  font-style: italic;
+  padding: 20px 0;
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  letter-spacing: 0.04em;
+}
+
+.works-col-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mint-dim);
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+.card-body {
+  padding: 20px 24px 28px;
+}
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--mint-faint);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 18px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #43b77a;
+  box-shadow: 0 0 6px #43b77a;
+  flex-shrink: 0;
+  animation: pulse 2.2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.status-text {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.online-since {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--text-muted);
+  opacity: 0.5;
+  letter-spacing: 0.04em;
+}
+
+.links-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--mint-faint);
+  font-size: 11px;
+  color: var(--mint);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  cursor: pointer;
+}
+
+.link-pill:hover {
+  border-color: var(--mint);
+  box-shadow: 0 0 12px var(--mint-glow);
+  background: rgba(78,204,163,0.14);
+}
+
+.pet {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  position: fixed;
+}
+
+.pet-bubble {
+  position: absolute;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+
+  background: #0a0a0a;
+  border: 1px solid var(--mint-dim);
+  color: var(--mint);
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border-bottom-right-radius: 2px;
+
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+
+.pet-bubble.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.pet-body {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s;
+  animation: float 3s ease-in-out infinite;
+}
+
+.pet-body img {
+  width: 120%;
+  height: 120%;
+  object-fit: contain;
+}
+
+.pet:hover .pet-body {
+  transform: scale(1.1);
+}
+
+.pet-body img:hover {
+  content: url("images/cat2.png");
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@media (max-width: 600px) {
+  .pet {
+    right: 50%;
+    transform: translateX(50%);
+    bottom: 16px;
+  }
+
+  .works-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    margin-top: 24px;
+  }
+
+  .name-block h1 {
+    font-size: 22px;
+  }
+}
+
+.glow-border {
+  animation: border-glow 4s ease-in-out infinite;
+}
+
+@keyframes border-glow {
+  0%, 100% { box-shadow: 0 0 60px rgba(78,204,163,0.06), 0 0 0 1px var(--border); }
+  50% { box-shadow: 0 0 80px rgba(78,204,163,0.12), 0 0 0 1px rgba(78,204,163,0.35); }
+}
+
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 2px;
+}
+</style>
 </head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="page-wrap">
+  <div class="card glow-border">
+
+    <div class="banner">
+      <img src="images/banner.png" id="bannerImg" alt="banner" style="width:100%;height:100%;object-fit:cover">
+    </div>
+
+    <div class="profile-area">
+      <div class="avatar-wrap">
+        <div class="avatar">
+          <img src="images/avatar.jpg" id="avatarImg" alt="avatar" style="width:100%;height:100%;object-fit:cover">
+        </div>
+      </div>
+
+      <div class="name-row">
+        <div class="name-block">
+          <h1>exi</h1>
+          <div class="pronouns">he / him</div>
+        </div>
+        <div class="tag">scholar of dorktown</div>
+      </div>
+
+      <div class="badges">
+        <div class="badge">
+          <img src="images/gamer.png" alt="badge 1" class="badge-img">
+          <div class="badge-tip">Fake Gamer</div>
+        </div>
+        <div class="badge">
+          <img src="images/programmer.png" alt="badge 2" class="badge-img">
+          <div class="badge-tip">Fake Programmer</div>
+        </div>
+        <div class="badge">
+          <img src="images/nerd.png" alt="badge 3" class="badge-img">
+          <div class="badge-tip">Nerd</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      <div class="status-bar">
+        <div class="status-dot"></div>
+        <div class="status-text">online and very bored</div>
+        <div class="online-since">disturb me</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-label">about me</div>
+      <div class="bio-text">
+        Scholar of Dorktown, got burned at the stake but im pyrophobic so i didnt die. i write short books and make shorter games like listed below. i dont have a liking to anything, i try something new but either stop and forget OR i continue doing it but then stop after a week. i am a very bored person so please please disturb me in my DMs uwu
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-label">works</div>
+      <div class="works-grid">
+        <div>
+          <div class="works-col-label">games</div>
+          <div class="works-empty">nothing here yet :(</div>
+        </div>
+        <div>
+          <div class="works-col-label">books</div>
+          <div class="works-empty">nothing here yet :(</div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+<div class="pet" id="pet">
+  <div class="pet-bubble" id="petBubble">hewwo :3</div>
+  <div class="pet-body">
+    <img src="images/cat1.png" alt="pet" id="petImg" data-hover="images/cat2.png">
+  </div>
+</div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const names = ["Bonkers", "Ice Cream", "Bingus", "Fake Friend", "Exi"];
-    const randomName = names[Math.floor(Math.random() * names.length)];
-    document.getElementById("logoText").textContent = randomName;
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+let W, H, dots = [], mouse = { x: -999, y: -999 };
+const isMobile = window.matchMedia('(max-width:600px)').matches;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function makeDots() {
+  dots = [];
+  let count = Math.floor((W * H) / 9000);
+  for (let i = 0; i < count; i++) {
+    dots.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      ox: 0,
+      oy: 0,
+      r: Math.random() * 2 + 1,
+      base: Math.random() * 0.18 + 0.06
+    });
+  }
+}
+
+function drawBg() {
+  let grad = ctx.createRadialGradient(W * 0.3, H * 0.2, 0, W * 0.5, H * 0.5, Math.max(W, H));
+  grad.addColorStop(0, '#080d0b');
+  grad.addColorStop(0.45, '#060a08');
+  grad.addColorStop(0.8, '#040807');
+  grad.addColorStop(1, '#030605');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+}
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function loop() {
+  drawBg();
+  const radius = 120;
+  for (let d of dots) {
+    let dx = d.x - mouse.x;
+    let dy = d.y - mouse.y;
+    let dist = Math.sqrt(dx * dx + dy * dy);
+    let targetOx = 0, targetOy = 0;
+    if (!isMobile && dist < radius) {
+      let force = (1 - dist / radius) * 18;
+      targetOx = (dx / dist) * force;
+      targetOy = (dy / dist) * force;
+    }
+    d.ox = lerp(d.ox, targetOx, 0.08);
+    d.oy = lerp(d.oy, targetOy, 0.08);
+    let alpha = d.base + (Math.abs(d.ox) + Math.abs(d.oy)) * 0.012;
+    ctx.beginPath();
+    ctx.arc(d.x + d.ox, d.y + d.oy, d.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(78,204,163,${Math.min(alpha, 0.55)})`;
+    ctx.fill();
+  }
+  requestAnimationFrame(loop);
+}
+
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+window.addEventListener('resize', () => { resize(); makeDots(); });
+resize();
+makeDots();
+loop();
+
+const msgs = [
+  'hewwo :3', 'purrr', 'mrrrow~', 'pet me!!', '*bonks u*',
+  'bored too?', 'meow meow', '*kneads*', 'i luv u', 'fuck you'
+];
+let lastMsg = 0;
+const pet = document.getElementById('pet');
+const bubble = document.getElementById('petBubble');
+let bubbleTimeout;
+
+pet.addEventListener('click', function() {
+  let idx = (lastMsg + 1) % msgs.length;
+  lastMsg = idx;
+  bubble.textContent = msgs[idx];
+  bubble.classList.add('show');
+  clearTimeout(bubbleTimeout);
+  bubbleTimeout = setTimeout(() => bubble.classList.remove('show'), 2400);
+});
+
+pet.addEventListener('mouseenter', function() {
+  if (!bubble.classList.contains('show')) {
+    bubble.textContent = msgs[lastMsg];
+    bubble.classList.add('show');
+    clearTimeout(bubbleTimeout);
+    bubbleTimeout = setTimeout(() => bubble.classList.remove('show'), 2000);
+  }
 });
 </script>
-
-<body>
-<header id="mainHeader">
-    <div class="logo" id="logoText"></div>
-    <div class="nav-links">
-        <a href="#about">About Me</a>
-        <a href="#">Blank Redirect</a>
-    </div>
-</header>
-
-<section class="hero">
-    <div class="hero-content">
-        <h1>Welcome to My Home</h1>
-        <div class="hero-subtitles">
-            <p class="subtitle-line">Scrambled Eggs</p>
-            <p class="subtitle-line second-line"></p>
-        </div>
-    </div>
-</section>
-
-<section class="library">
-    <div class="shelf">
-        <div class="book">
-            <a href="book1/chapter1.html">
-                <img src="images/book1.png" alt="Book 1">
-                <div class="caption">Book 1</div>
-            </a>
-        </div>
-    </div>
-</section>
-
-<section id="about" class="about">
-    <div class="about-container">
-        <h2>About Me</h2>
-        <p>
-            Hello. I am Exi. I like games.
-            So anyways here is some more info about me:
-        </p>
-        <p>
-            I write shitty books so the world can experience my horrors. 
-            I'm adding a comment section below my books so you can comment each chapter/volume.
-            So far, only one book is written.
-        </p>
-    </div>
-</section>
-
-<footer>
-    <h3>Connect With Me:</h3>
-    <div class="socials">
-        <a href="https://www.youtube.com/@exisoggysocks">YouTube</a>
-        <a href="https://www.discord.gg/EedASnsaKM">Discord</a>
-    </div>
-</footer>
-
 </body>
 </html>
