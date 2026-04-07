@@ -6,7 +6,11 @@
 <title>exi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAACG0PgAAAAAAABVmgA6l8gAUarZAESErwBiuukAPmmGAAE3bQAud50AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERERERERERERERERERiIgRERERERh1WYgRERERiVNDOYgRERGDVkRTmYERESRgBEQ5mBERI2AGREN4ERESRmZEQzgREREpVENEMhERERIilDUhEREREREiIhERERERERERERERERERERERERERERERERERERERERERH//wAA//8AAPD/AADgPwAAwA8AAMAHAADAAwAAwAMAAOADAADwAwAA+AcAAP8PAAD//wAA//8AAP//AAD//wAA" rel="icon" type="image/x-icon">
 <style>
 *, *::before, *::after {
@@ -376,16 +380,74 @@ canvas#bg {
     display: none;
   }
 
+  /* Faster card rendering - reduce expensive effects */
+  .card {
+    margin-top: 16px;
+    backdrop-filter: blur(6px); /* reduced from 18px - huge perf win */
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 0 30px rgba(78,204,163,0.05), 0 0 0 1px var(--border);
+  }
+
+  /* Disable glow border animation on mobile - saves battery */
+  .glow-border {
+    animation: none;
+  }
+
+  /* Disable float animation on mobile pet - smoother */
+  .pet-body {
+    animation: none;
+  }
+
   .works-grid {
     grid-template-columns: 1fr;
   }
 
-  .card {
-    margin-top: 24px;
-  }
-
   .name-block h1 {
     font-size: 22px;
+  }
+
+  .page-wrap {
+    padding: 0 12px 100px;
+  }
+
+  .card-body {
+    padding: 16px 18px 22px;
+  }
+
+  .profile-area {
+    padding: 0 18px;
+  }
+
+  /* Pet — fixed to bottom-right, same as PC */
+  .pet {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+  }
+
+  /* Bubble pops above and slightly left so it doesn't clip edge */
+  .pet-bubble {
+    bottom: 68px;
+    left: auto;
+    right: 0;
+    transform: translateY(6px);
+  }
+
+  .pet-bubble.show {
+    transform: translateY(0);
+  }
+
+  /* Slightly smaller pet on mobile */
+  .pet-body {
+    width: 50px;
+    height: 50px;
+  }
+
+  /* Disable shimmer on mobile - reduces repaints */
+  .avatar-skeleton {
+    animation: none;
+    background: #132418;
   }
 }
 
@@ -509,42 +571,48 @@ canvas#bg {
 </div>
 
 <script>
+const isMobile = window.innerWidth <= 600 || ('ontouchstart' in window);
 const canvas = document.getElementById('bg');
-const ctx = canvas.getContext('2d');
-let W, H, dots = [], mouse = { x: -999, y: -999 };
 
-function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-function makeDots() {
-  dots = [];
-  let count = Math.floor((W * H) / 9000);
-  for (let i = 0; i < count; i++) {
-    dots.push({ x: Math.random()*W, y: Math.random()*H, ox:0, oy:0, r: Math.random()*2+1, base: Math.random()*0.18+0.06 });
+if (!isMobile) {
+  const ctx = canvas.getContext('2d');
+  let W, H, dots = [], mouse = { x: -999, y: -999 };
+
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  function makeDots() {
+    dots = [];
+    let count = Math.floor((W * H) / 9000);
+    for (let i = 0; i < count; i++) {
+      dots.push({ x: Math.random()*W, y: Math.random()*H, ox:0, oy:0, r: Math.random()*2+1, base: Math.random()*0.18+0.06 });
+    }
   }
-}
-function drawBg() {
-  let grad = ctx.createRadialGradient(W*0.3, H*0.2, 0, W*0.5, H*0.5, Math.max(W,H));
-  grad.addColorStop(0,'#080d0b'); grad.addColorStop(0.45,'#060a08');
-  grad.addColorStop(0.8,'#040807'); grad.addColorStop(1,'#030605');
-  ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
-}
-function lerp(a,b,t){ return a+(b-a)*t; }
-function loop() {
-  drawBg();
-  const radius = 120;
-  for (let d of dots) {
-    let dx=d.x-mouse.x, dy=d.y-mouse.y, dist=Math.sqrt(dx*dx+dy*dy);
-    let tox=0, toy=0;
-    if (dist<radius) { let f=(1-dist/radius)*18; tox=(dx/dist)*f; toy=(dy/dist)*f; }
-    d.ox=lerp(d.ox,tox,0.08); d.oy=lerp(d.oy,toy,0.08);
-    let alpha=d.base+(Math.abs(d.ox)+Math.abs(d.oy))*0.012;
-    ctx.beginPath(); ctx.arc(d.x+d.ox, d.y+d.oy, d.r, 0, Math.PI*2);
-    ctx.fillStyle=`rgba(78,204,163,${Math.min(alpha,0.55)})`; ctx.fill();
+  function drawBg() {
+    let grad = ctx.createRadialGradient(W*0.3, H*0.2, 0, W*0.5, H*0.5, Math.max(W,H));
+    grad.addColorStop(0,'#080d0b'); grad.addColorStop(0.45,'#060a08');
+    grad.addColorStop(0.8,'#040807'); grad.addColorStop(1,'#030605');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
   }
-  requestAnimationFrame(loop);
+  function lerp(a,b,t){ return a+(b-a)*t; }
+  function loop() {
+    drawBg();
+    const radius = 120;
+    for (let d of dots) {
+      let dx=d.x-mouse.x, dy=d.y-mouse.y, dist=Math.sqrt(dx*dx+dy*dy);
+      let tox=0, toy=0;
+      if (dist<radius) { let f=(1-dist/radius)*18; tox=(dx/dist)*f; toy=(dy/dist)*f; }
+      d.ox=lerp(d.ox,tox,0.08); d.oy=lerp(d.oy,toy,0.08);
+      let alpha=d.base+(Math.abs(d.ox)+Math.abs(d.oy))*0.012;
+      ctx.beginPath(); ctx.arc(d.x+d.ox, d.y+d.oy, d.r, 0, Math.PI*2);
+      ctx.fillStyle=`rgba(78,204,163,${Math.min(alpha,0.55)})`; ctx.fill();
+    }
+    requestAnimationFrame(loop);
+  }
+  window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+  window.addEventListener('resize', ()=>{ resize(); makeDots(); });
+  resize(); makeDots(); loop();
+} else {
+  canvas.style.display = 'none';
 }
-window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
-window.addEventListener('resize', ()=>{ resize(); makeDots(); });
-resize(); makeDots(); loop();
 
 const msgs = ['hewwo :3','purrr','mrrrow~','pet me!!','*bonks u*','bored too?','meow meow','*kneads*','i luv u','fuck you'];
 let lastMsg = 0;
@@ -563,6 +631,13 @@ pet.addEventListener('mouseenter', function() {
     clearTimeout(bubbleTimeout); bubbleTimeout=setTimeout(()=>bubble.classList.remove('show'),2000);
   }
 });
+// Touch support for mobile
+pet.addEventListener('touchstart', function(e) {
+  e.preventDefault();
+  let idx=(lastMsg+1)%msgs.length; lastMsg=idx;
+  bubble.textContent=msgs[idx]; bubble.classList.add('show');
+  clearTimeout(bubbleTimeout); bubbleTimeout=setTimeout(()=>bubble.classList.remove('show'),2400);
+}, { passive: false });
 
 const DISCORD_ID = '750971511401218078';
 const activityText   = document.getElementById('activityText');
