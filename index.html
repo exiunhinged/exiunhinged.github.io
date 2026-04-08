@@ -12,6 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAACG0PgAAAAAAABVmgA6l8gAUarZAESErwBiuukAPmmGAAE3bQAud50AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERERERERERERERERERiIgRERERERh1WYgRERERiVNDOYgRERGDVkRTmYERESRgBEQ5mBERI2AGREN4ERESRmZEQzgREREpVENEMhERERIilDUhEREREREiIhERERERERERERERERERERERERERERERERERERERERERH//wAA//8AAPD/AADgPwAAwA8AAMAHAADAAwAAwAMAAOADAADwAwAA+AcAAP8PAAD//wAA//8AAP//AAD//wAA" rel="icon" type="image/x-icon">
+<link rel="preload" as="image" href="images/cat2.png">
 <style>
 *, *::before, *::after {
   box-sizing: border-box;
@@ -56,16 +57,203 @@ canvas#bg {
   padding: 0 16px 120px;
 }
 
-.card {
+.layout-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
   width: 100%;
+  max-width: 1060px;
+  margin-top: 48px;
+}
+
+.side-panel {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  flex: 1;
+  min-width: 0;
   max-width: 640px;
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 0 60px rgba(78,204,163,0.06), 0 0 0 1px var(--border);
-  margin-top: 48px;
   backdrop-filter: blur(18px);
+}
+
+.panel-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 0 30px rgba(78,204,163,0.04);
+}
+
+.section-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--mint-dim);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.social-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.social-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.social-item:hover {
+  border-color: var(--border);
+  background: var(--mint-faint);
+  color: var(--mint);
+}
+
+.social-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--mint-faint);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.social-icon svg {
+  width: 15px;
+  height: 15px;
+  fill: var(--text-muted);
+  transition: fill 0.2s;
+}
+
+.social-item:hover .social-icon svg {
+  fill: var(--mint);
+}
+
+.loved-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.loved-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 9px 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.loved-item + .loved-item {
+  border-top: 1px solid var(--border);
+}
+
+.loved-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mint-dim);
+  flex-shrink: 0;
+  margin-top: 4px;
+  opacity: 0.7;
+}
+
+.fav-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.fav-item {
+  background: var(--mint-faint);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  aspect-ratio: 1 / 1.15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 6px 5px 7px;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: default;
+}
+
+.fav-item:hover {
+  border-color: rgba(78,204,163,0.4);
+  box-shadow: 0 0 14px var(--mint-glow);
+}
+
+.fav-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fav-placeholder-icon {
+  width: 26px;
+  height: 26px;
+  opacity: 0.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fav-placeholder-icon svg {
+  width: 26px;
+  height: 26px;
+  fill: var(--mint);
+}
+
+.fav-title {
+  font-size: 10px;
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.04em;
+  position: relative;
+  z-index: 1;
+}
+
+.fav-subtitle {
+  font-size: 9px;
+  color: var(--text-muted);
+  opacity: 0.65;
+  text-align: center;
+  letter-spacing: 0.06em;
+  position: relative;
+  z-index: 1;
 }
 
 .banner {
@@ -74,6 +262,7 @@ canvas#bg {
   background: linear-gradient(135deg, #060d09 0%, #080d0b 50%, #061210 100%);
   position: relative;
   overflow: hidden;
+
 }
 
 .banner::before {
@@ -241,16 +430,6 @@ canvas#bg {
   opacity: 0.88;
 }
 
-.section-label {
-  font-family: 'Syne', sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--mint-dim);
-  margin-bottom: 14px;
-  font-weight: 600;
-}
-
 .works-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -375,50 +554,43 @@ canvas#bg {
   50% { transform: translateY(-5px); }
 }
 
-@media (max-width: 600px) {
-  canvas#bg {
-    display: none;
+@media (max-width: 900px) {
+  .layout-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
   }
 
-  /* Faster card rendering - reduce expensive effects */
+  .side-panel {
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .side-panel.left  { order: 1; }
+  .card             { order: 2; }
+  .side-panel.right { order: 3; }
+}
+
+@media (max-width: 600px) {
+  canvas#bg { display: none; }
+
   .card {
-    margin-top: 16px;
-    backdrop-filter: blur(6px); /* reduced from 18px - huge perf win */
+    margin-top: 0;
+    backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     box-shadow: 0 0 30px rgba(78,204,163,0.05), 0 0 0 1px var(--border);
   }
 
-  /* Disable glow border animation on mobile - saves battery */
-  .glow-border {
-    animation: none;
-  }
+  .glow-border { animation: none; }
+  .pet-body    { animation: none; }
 
-  /* Disable float animation on mobile pet - smoother */
-  .pet-body {
-    animation: none;
-  }
+  .works-grid { grid-template-columns: 1fr; }
+  .name-block h1 { font-size: 22px; }
 
-  .works-grid {
-    grid-template-columns: 1fr;
-  }
+  .page-wrap  { padding: 0 12px 100px; }
+  .card-body  { padding: 16px 18px 22px; }
+  .profile-area { padding: 0 18px; }
 
-  .name-block h1 {
-    font-size: 22px;
-  }
-
-  .page-wrap {
-    padding: 0 12px 100px;
-  }
-
-  .card-body {
-    padding: 16px 18px 22px;
-  }
-
-  .profile-area {
-    padding: 0 18px;
-  }
-
-  /* Pet — fixed to bottom-right, same as PC */
   .pet {
     position: fixed;
     bottom: 20px;
@@ -426,7 +598,6 @@ canvas#bg {
     z-index: 100;
   }
 
-  /* Bubble pops above and slightly left so it doesn't clip edge */
   .pet-bubble {
     bottom: 68px;
     left: auto;
@@ -434,21 +605,13 @@ canvas#bg {
     transform: translateY(6px);
   }
 
-  .pet-bubble.show {
-    transform: translateY(0);
-  }
+  .pet-bubble.show { transform: translateY(0); }
 
-  /* Slightly smaller pet on mobile */
-  .pet-body {
-    width: 50px;
-    height: 50px;
-  }
+  .pet-body { width: 50px; height: 50px; }
 
-  /* Disable shimmer on mobile - reduces repaints */
-  .avatar-skeleton {
-    animation: none;
-    background: #132418;
-  }
+  .avatar-skeleton { animation: none; background: #132418; }
+
+  .fav-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 .glow-border {
@@ -491,75 +654,209 @@ canvas#bg {
 <canvas id="bg"></canvas>
 
 <div class="page-wrap">
-  <div class="card glow-border">
+  <div class="layout-row">
 
-    <div class="banner">
-      <img src="images/banner.png" id="bannerImg" alt="banner" style="width:100%;height:100%;object-fit:cover">
-    </div>
+    <div class="side-panel left">
 
-    <div class="profile-area">
-      <div class="avatar-wrap">
-        <div class="avatar">
-          <div class="avatar-skeleton" id="avatarSkeleton"></div>
-          <img src="images/avatar.jpg" id="avatarImg" alt="avatar"
-               style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity 0.4s;">
-        </div>
-        <div class="avatar-status offline" id="avatarStatus"></div>
-      </div>
+      <div class="panel-box">
+        <div class="section-label">socials</div>
+        <div class="social-list">
 
-      <div class="name-row">
-        <div class="name-block">
-          <h1>exi</h1>
-          <div class="pronouns">he / him</div>
-        </div>
-        <div class="tag">scholar of dorktown</div>
-      </div>
+          <a href="https://www.youtube.com/channel/UCwH2bC5lHdy8QUYA91SG1Fg" class="social-item">
+            <div class="social-icon">
+              <img src="images/youtube-svgrepo-com.svg" alt="YouTube" style="width:16px;height:16px;filter: invert(100%) sepia(100%) grayscale(100%) brightness(150%);">
+            </div>
+            YouTube
+          </a>
 
-      <div class="badges">
-        <div class="badge">
-          <img src="images/gamer.png" alt="badge 1" class="badge-img">
-          <div class="badge-tip">Fake Gamer</div>
-        </div>
-        <div class="badge">
-          <img src="images/programmer.png" alt="badge 2" class="badge-img">
-          <div class="badge-tip">Fake Programmer</div>
-        </div>
-        <div class="badge">
-          <img src="images/nerd.png" alt="badge 3" class="badge-img">
-          <div class="badge-tip">Nerd</div>
+          <a href="https://discord.gg/jz2SAe8MvQ" class="social-item">
+            <div class="social-icon">
+              <img src="images/discord-icon-svgrepo-com.svg" alt="Discord" style="width:16px;height:16px;filter: invert(100%) sepia(100%) grayscale(100%) brightness(150%);">
+            </div>
+            Discord
+          </a>
+
+          <a href="https://steamcommunity.com/id/moneymoneyrain/" class="social-item">
+            <div class="social-icon">
+              <img src="images/steam-svgrepo-com.svg" alt="Steam" style="width:16px;height:16px;filter: invert(100%) sepia(100%) grayscale(100%) brightness(150%);">
+            </div>
+            Steam
+          </a>
+
         </div>
       </div>
-    </div>
 
-    <div class="card-body">
-
-      <div class="status-bar">
-        <div class="activity-text" id="activityText">online and very bored</div>
-        <div class="disturb-label">disturb me</div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="section-label">about me</div>
-      <div class="bio-text">
-        I was once burned at the stake but im pyrophobic so i didnt die. i write short books and make shorter games like listed below. i dont have a liking to anything, i try something new but either stop and forget OR i continue doing it but then stop after a week. i am a very bored person so please please disturb me in my DMs uwu
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="section-label">works</div>
-      <div class="works-grid">
-        <div>
-          <div class="works-col-label">games</div>
-          <div class="works-empty">nothing here yet :(</div>
-        </div>
-        <div>
-          <div class="works-col-label">books</div>
-          <div class="works-empty">nothing here yet :(</div>
+      <div class="panel-box">
+        <div class="section-label">other loved medias</div>
+        <div class="loved-list">
+          <div class="loved-item">
+            <div class="loved-dot"></div>
+            <span>The Boys</span>
+          </div>
+          <div class="loved-item">
+            <div class="loved-dot"></div>
+            <span>Supernatural</span>
+          </div>
+          <div class="loved-item">
+            <div class="loved-dot"></div>
+            <span>Malcolm in the Middle</span>
+          </div>
+          <div class="loved-item">
+            <div class="loved-dot"></div>
+            <span>JoJo's Bizarre Adventure</span>
+          </div>
+          <div class="loved-item">
+            <div class="loved-dot"></div>
+            <span>Red Dead Redemption 2</span>
+          </div>
+          <div class="loved-item">
+            <div class="loved-dot"></div>
+            <span>Far Cry 4</span>
+          </div>
         </div>
       </div>
 
     </div>
+
+    <div class="card glow-border">
+
+      <div class="banner">
+        <img src="images/banner.gif" id="bannerImg" alt="banner" style="width:100%;height:100%;object-fit:cover">
+      </div>
+
+      <div class="profile-area">
+        <div class="avatar-wrap">
+          <div class="avatar">
+            <div class="avatar-skeleton" id="avatarSkeleton"></div>
+            <img src="images/avatar.jpg" id="avatarImg" alt="avatar"
+                 style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity 0.4s;">
+          </div>
+          <div class="avatar-status offline" id="avatarStatus"></div>
+        </div>
+
+        <div class="name-row">
+          <div class="name-block">
+            <h1>exi</h1>
+            <div class="pronouns">he / him</div>
+          </div>
+          <div class="tag">scholar of dorktown</div>
+        </div>
+
+        <div class="badges">
+          <div class="badge">
+            <img src="images/gamer.png" alt="badge 1" class="badge-img">
+            <div class="badge-tip">Fake Gamer</div>
+          </div>
+          <div class="badge">
+            <img src="images/programmer.png" alt="badge 2" class="badge-img">
+            <div class="badge-tip">Fake Programmer</div>
+          </div>
+          <div class="badge">
+            <img src="images/nerd.png" alt="badge 3" class="badge-img">
+            <div class="badge-tip">Nerd</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <div class="status-bar">
+          <div class="activity-text" id="activityText">online and very bored</div>
+          <div class="disturb-label">disturb me</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-label">about me</div>
+        <div class="bio-text">
+          I was once burned at the stake but im pyrophobic so i didnt die. i write short books and make shorter games like listed below. i dont have a liking to anything, i try something new but either stop and forget OR i continue doing it but then stop after a week. i am a very bored person so please please disturb me in my DMs uwu
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-label">works</div>
+        <div class="works-grid">
+          <div>
+            <div class="works-col-label">games</div>
+            <div class="works-empty">nothing here yet :(</div>
+          </div>
+          <div>
+            <div class="works-col-label">books</div>
+            <div class="works-empty">nothing here yet :(</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="side-panel right">
+      <div class="panel-box">
+        <div class="section-label">favourites</div>
+        <div class="fav-grid">
+
+  <div class="fav-item">
+    <div class="fav-placeholder">
+      <div class="fav-placeholder-icon">
+        <img src="images/berserk.png" alt="manga">
+      </div>
+    </div>
+    <div class="fav-title">Berserk</div>
+    <div class="fav-subtitle">Manga</div>
+  </div>
+
+  <div class="fav-item">
+    <div class="fav-placeholder">
+      <div class="fav-placeholder-icon">
+        <img src="images/aot.png" alt="aot">
+      </div>
+    </div>
+    <div class="fav-title">Attack On Titan</div>
+    <div class="fav-subtitle">Anime</div>
+  </div>
+
+  <div class="fav-item">
+    <div class="fav-placeholder">
+      <div class="fav-placeholder-icon">
+        <img src="images/twd.png" alt="twd">
+      </div>
+    </div>
+    <div class="fav-title">The Walking Dead</div>
+    <div class="fav-subtitle">Comic</div>
+  </div>
+
+  <div class="fav-item">
+    <div class="fav-placeholder">
+      <div class="fav-placeholder-icon">
+        <img src="images/bb.png" alt="breaking bad">
+      </div>
+    </div>
+    <div class="fav-title">Breaking Bad</div>
+    <div class="fav-subtitle">TV Show</div>
+  </div>
+
+  <div class="fav-item">
+    <div class="fav-placeholder">
+      <div class="fav-placeholder-icon">
+        <img src="images/cat2.png" alt="stray cat">
+      </div>
+    </div>
+    <div class="fav-title">The Stray Cat</div>
+    <div class="fav-subtitle">Animal</div>
+  </div>
+
+  <div class="fav-item">
+    <div class="fav-placeholder">
+      <div class="fav-placeholder-icon">
+        <img src="images/dbh.png" alt="Detroit Become Human">
+      </div>
+    </div>
+    <div class="fav-title">Game</div>
+    <div class="fav-subtitle">Detroit Become Human</div>
+  </div>
+</div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -631,7 +928,6 @@ pet.addEventListener('mouseenter', function() {
     clearTimeout(bubbleTimeout); bubbleTimeout=setTimeout(()=>bubble.classList.remove('show'),2000);
   }
 });
-// Touch support for mobile
 pet.addEventListener('touchstart', function(e) {
   e.preventDefault();
   let idx=(lastMsg+1)%msgs.length; lastMsg=idx;
