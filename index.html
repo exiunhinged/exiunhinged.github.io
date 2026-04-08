@@ -221,12 +221,19 @@ canvas#bg {
 }
 
 .fav-placeholder-icon {
-  width: 26px;
-  height: 26px;
-  opacity: 0.2;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.fav-placeholder-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .fav-placeholder-icon svg {
@@ -574,15 +581,33 @@ canvas#bg {
 @media (max-width: 600px) {
   canvas#bg { display: none; }
 
+  .pet { display: none; }
+
+  .card             { order: 1; }
+  .side-panel.left  { order: 2; }
+  .side-panel.right { order: 3; }
+
   .card {
     margin-top: 0;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    box-shadow: 0 0 30px rgba(78,204,163,0.05), 0 0 0 1px var(--border);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    animation: none;
   }
 
-  .glow-border { animation: none; }
+  .glow-border { animation: none; box-shadow: none; }
   .pet-body    { animation: none; }
+
+  .avatar { transition: none; }
+  .avatar:hover { box-shadow: none; }
+
+  .avatar-status.online  { box-shadow: none; }
+  .avatar-status.idle    { box-shadow: none; }
+  .avatar-status.dnd     { box-shadow: none; }
+
+  .badge:hover { box-shadow: none; }
+
+  .fav-item:hover { box-shadow: none; }
 
   .works-grid { grid-template-columns: 1fr; }
   .name-block h1 { font-size: 22px; }
@@ -591,27 +616,14 @@ canvas#bg {
   .card-body  { padding: 16px 18px 22px; }
   .profile-area { padding: 0 18px; }
 
-  .pet {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 100;
-  }
-
-  .pet-bubble {
-    bottom: 68px;
-    left: auto;
-    right: 0;
-    transform: translateY(6px);
-  }
-
-  .pet-bubble.show { transform: translateY(0); }
-
-  .pet-body { width: 50px; height: 50px; }
-
   .avatar-skeleton { animation: none; background: #132418; }
 
-  .fav-grid { grid-template-columns: repeat(3, 1fr); }
+  .fav-grid { grid-template-columns: 1fr; }
+  .fav-item { aspect-ratio: unset; flex-direction: row; justify-content: flex-start; padding: 8px 10px; gap: 10px; min-height: 64px; }
+  .fav-placeholder { position: relative; inset: auto; width: 46px; height: 46px; flex-shrink: 0; border-radius: 6px; overflow: hidden; }
+  .fav-placeholder-icon { width: 46px; height: 46px; }
+  .fav-title { font-size: 11px; text-align: left; }
+  .fav-subtitle { font-size: 9px; text-align: left; }
 }
 
 .glow-border {
