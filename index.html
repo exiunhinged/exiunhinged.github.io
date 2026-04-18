@@ -14,6 +14,13 @@
 <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAACG0PgAAAAAAABVmgA6l8gAUarZAESErwBiuukAPmmGAAE3bQAud50AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERERERERERERERERERiIgRERERERh1WYgRERERiVNDOYgRERGDVkRTmYERESRgBEQ5mBERI2AGREN4ERESRmZEQzgREREpVENEMhERERIilDUhEREREREiIhERERERERERERERERERERERERERERERERERERERERERH//wAA//8AAPD/AADgPwAAwA8AAMAHAADAAwAAwAMAAOADAADwAwAA+AcAAP8PAAD//wAA//8AAP//AAD//wAA" rel="icon" type="image/x-icon">
 <link rel="preload" as="image" href="images/cat2.png">
 <style>
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -26,8 +33,10 @@
   --mint-glow: rgba(78, 204, 163, 0.35);
   --mint-faint: rgba(78, 204, 163, 0.08);
   --black: #0a0a0a;
-  --card-bg: rgba(10, 12, 11, 0.92);
-  --border: rgba(78, 204, 163, 0.22);
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shine: rgba(255, 255, 255, 0.07);
+  --border: rgba(78, 204, 163, 0.18);
   --text: #d4f0e8;
   --text-muted: #7ab8a4;
 }
@@ -78,21 +87,33 @@ canvas#bg {
   flex: 1;
   min-width: 0;
   max-width: 640px;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 22px;
   overflow: hidden;
-  box-shadow: 0 0 60px rgba(78,204,163,0.06), 0 0 0 1px var(--border);
-  backdrop-filter: blur(18px);
+  position: relative;
+  box-shadow:
+    0 0 0 0.5px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    0 8px 40px rgba(0,0,0,0.45),
+    0 0 60px rgba(78,204,163,0.05);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
 }
 
 .panel-box {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 20px;
   padding: 16px;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 0 30px rgba(78,204,163,0.04);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  box-shadow:
+    0 0 0 0.5px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    0 6px 30px rgba(0,0,0,0.38);
 }
 
 .section-label {
@@ -126,8 +147,8 @@ canvas#bg {
 }
 
 .social-item:hover {
-  border-color: var(--border);
-  background: var(--mint-faint);
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.07);
   color: var(--mint);
 }
 
@@ -135,8 +156,8 @@ canvas#bg {
   width: 28px;
   height: 28px;
   border-radius: 6px;
-  background: var(--mint-faint);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -184,6 +205,16 @@ canvas#bg {
   opacity: 0.7;
 }
 
+.loved-link {
+  cursor: default;
+  transition: color 0.15s;
+}
+
+.loved-link:hover {
+  cursor: pointer;
+  color: var(--mint);
+}
+
 .fav-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -191,9 +222,10 @@ canvas#bg {
 }
 
 .fav-item {
-  background: var(--mint-faint);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
   aspect-ratio: 1 / 1.15;
   display: flex;
   flex-direction: column;
@@ -205,11 +237,12 @@ canvas#bg {
   overflow: hidden;
   transition: border-color 0.2s, box-shadow 0.2s;
   cursor: default;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 16px rgba(0,0,0,0.3);
 }
 
 .fav-item:hover {
-  border-color: rgba(78,204,163,0.4);
-  box-shadow: 0 0 14px var(--mint-glow);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 20px rgba(0,0,0,0.4), 0 0 14px rgba(78,204,163,0.15);
 }
 
 .fav-placeholder {
@@ -251,6 +284,7 @@ canvas#bg {
   letter-spacing: 0.04em;
   position: relative;
   z-index: 1;
+  display: none;
 }
 
 .fav-subtitle {
@@ -261,6 +295,45 @@ canvas#bg {
   letter-spacing: 0.06em;
   position: relative;
   z-index: 1;
+  display: none;
+}
+
+.fav-hover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(5,14,10,0.92) 0%, rgba(5,14,10,0.55) 55%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 7px 5px 8px;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.fav-hover-overlay .fav-hover-title {
+  font-size: 10px;
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.fav-hover-overlay .fav-hover-sub {
+  font-size: 9px;
+  color: var(--mint);
+  opacity: 0.85;
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+
+.fav-item:hover .fav-hover-overlay {
+  opacity: 1;
 }
 
 .banner {
@@ -269,7 +342,7 @@ canvas#bg {
   background: linear-gradient(135deg, #060d09 0%, #080d0b 50%, #061210 100%);
   position: relative;
   overflow: hidden;
-
+  z-index: 1;
 }
 
 .banner::before {
@@ -288,6 +361,7 @@ canvas#bg {
 .profile-area {
   padding: 0 24px;
   position: relative;
+  z-index: 1;
 }
 
 .avatar-wrap {
@@ -300,18 +374,26 @@ canvas#bg {
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  border: 4px solid var(--card-bg);
+  border: 4px solid rgba(255,255,255,0.08);
   background: linear-gradient(135deg, #0d1a14 0%, #0a2018 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   position: relative;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .avatar:hover {
   box-shadow: 0 0 0 2px var(--mint), 0 0 18px var(--mint-glow);
+  transform: rotate(360deg) scale(1.06);
+}
+
+@keyframes avatar-spin {
+  0% { transform: rotate(0deg) scale(1); }
+  60% { transform: rotate(370deg) scale(1.07); }
+  80% { transform: rotate(355deg) scale(1.05); }
+  100% { transform: rotate(360deg) scale(1.06); }
 }
 
 .avatar-status {
@@ -369,8 +451,8 @@ canvas#bg {
   width: 30px;
   height: 30px;
   border-radius: 6px;
-  background: var(--mint-faint);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -467,17 +549,22 @@ canvas#bg {
 
 .card-body {
   padding: 20px 24px 28px;
+  position: relative;
+  z-index: 1;
 }
 
 .status-bar {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px;
-  background: var(--mint-faint);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  padding: 0 14px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 12px;
   margin-bottom: 18px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
 .activity-text {
@@ -487,6 +574,9 @@ canvas#bg {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+  min-height: 1.4em;
 }
 
 .disturb-label {
@@ -589,25 +679,40 @@ canvas#bg {
 
   .card {
     margin-top: 0;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow: none;
+    background: rgba(20, 28, 24, 0.88);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: 0 0 0 0.5px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
     animation: none;
   }
 
-  .glow-border { animation: none; box-shadow: none; }
+  .panel-box {
+    background: rgba(20, 28, 24, 0.82);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: 0 0 0 0.5px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.07);
+  }
+
+  .fav-item {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.07);
+  }
+
+  .glow-border { animation: none; }
+
   .pet-body    { animation: none; }
 
   .avatar { transition: none; }
-  .avatar:hover { box-shadow: none; }
+  .avatar:hover { box-shadow: none; transform: none; }
 
   .avatar-status.online  { box-shadow: none; }
   .avatar-status.idle    { box-shadow: none; }
   .avatar-status.dnd     { box-shadow: none; }
 
   .badge:hover { box-shadow: none; }
-
-  .fav-item:hover { box-shadow: none; }
+  .fav-item:hover { box-shadow: none; border-color: rgba(255,255,255,0.12); }
 
   .works-grid { grid-template-columns: 1fr; }
   .name-block h1 { font-size: 22px; }
@@ -619,20 +724,49 @@ canvas#bg {
   .avatar-skeleton { animation: none; background: #132418; }
 
   .fav-grid { grid-template-columns: 1fr; }
-  .fav-item { aspect-ratio: unset; flex-direction: row; justify-content: flex-start; padding: 8px 10px; gap: 10px; min-height: 64px; }
+  .fav-item { aspect-ratio: unset; flex-direction: row; justify-content: flex-start; padding: 8px 10px; gap: 10px; min-height: 64px; transition: none; }
   .fav-placeholder { position: relative; inset: auto; width: 46px; height: 46px; flex-shrink: 0; border-radius: 6px; overflow: hidden; }
   .fav-placeholder-icon { width: 46px; height: 46px; }
-  .fav-title { font-size: 11px; text-align: left; }
-  .fav-subtitle { font-size: 9px; text-align: left; }
+
+  .fav-item .fav-hover-overlay {
+    position: relative;
+    inset: auto;
+    background: none;
+    opacity: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0;
+    gap: 2px;
+    flex: 1;
+  }
+  .fav-item .fav-hover-overlay .fav-hover-title { font-size: 11px; text-align: left; color: var(--text); }
+  .fav-item .fav-hover-overlay .fav-hover-sub   { font-size: 9px; text-align: left; opacity: 0.7; }
+
+  .social-item { transition: none; }
+  .status-bar { box-shadow: none; }
 }
 
 .glow-border {
-  animation: border-glow 4s ease-in-out infinite;
+  animation: border-glow 5s ease-in-out infinite;
 }
 
 @keyframes border-glow {
-  0%, 100% { box-shadow: 0 0 60px rgba(78,204,163,0.06), 0 0 0 1px var(--border); }
-  50% { box-shadow: 0 0 80px rgba(78,204,163,0.12), 0 0 0 1px rgba(78,204,163,0.35); }
+  0%, 100% {
+    box-shadow:
+      0 0 0 0.5px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.1),
+      0 8px 40px rgba(0,0,0,0.45),
+      0 0 40px rgba(78,204,163,0.04);
+  }
+  50% {
+    box-shadow:
+      0 0 0 0.5px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.14),
+      0 8px 50px rgba(0,0,0,0.5),
+      0 0 70px rgba(78,204,163,0.09);
+  }
 }
 
 .tag {
@@ -643,6 +777,14 @@ canvas#bg {
   border: 1px solid var(--border);
   color: var(--text-muted);
   letter-spacing: 0.08em;
+  margin-bottom: 2px;
+}
+
+.tags-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
   margin-bottom: 2px;
 }
 
@@ -703,27 +845,27 @@ canvas#bg {
         <div class="loved-list">
           <div class="loved-item">
             <div class="loved-dot"></div>
-            <span>The Boys</span>
+            <span class="loved-link" onclick="window.open('https://letmegooglethat.com/?q=The+Boys+TV+show','_blank')">The Boys</span>
           </div>
           <div class="loved-item">
             <div class="loved-dot"></div>
-            <span>Supernatural</span>
+            <span class="loved-link" onclick="window.open('https://letmegooglethat.com/?q=Supernatural+TV+show','_blank')">Supernatural</span>
           </div>
           <div class="loved-item">
             <div class="loved-dot"></div>
-            <span>Malcolm in the Middle</span>
+            <span class="loved-link" onclick="window.open('https://letmegooglethat.com/?q=Malcolm+in+the+Middle','_blank')">Malcolm in the Middle</span>
           </div>
           <div class="loved-item">
             <div class="loved-dot"></div>
-            <span>JoJo's Bizarre Adventure</span>
+            <span class="loved-link" onclick="window.open('https://letmegooglethat.com/?q=JoJo%27s+Bizarre+Adventure','_blank')">JoJo's Bizarre Adventure</span>
           </div>
           <div class="loved-item">
             <div class="loved-dot"></div>
-            <span>Red Dead Redemption 2</span>
+            <span class="loved-link" onclick="window.open('https://letmegooglethat.com/?q=Red+Dead+Redemption+2','_blank')">Red Dead Redemption 2</span>
           </div>
           <div class="loved-item">
             <div class="loved-dot"></div>
-            <span>Resident Evil Games</span>
+            <span class="loved-link" onclick="window.open('https://letmegooglethat.com/?q=Resident+Evil+games','_blank')">Resident Evil Games</span>
           </div>
         </div>
       </div>
@@ -735,6 +877,18 @@ canvas#bg {
       <div class="banner">
         <img src="images/banner.gif" id="bannerImg" alt="banner" style="width:100%;height:100%;object-fit:cover">
       </div>
+
+      <div id="gameBg" style="
+        position:absolute;inset:0;z-index:0;pointer-events:none;
+        background-size:cover;background-position:center;
+        opacity:0;transition:opacity 0.8s ease;
+        border-radius:18px;overflow:hidden;
+      "></div>
+      <div id="gameBgOverlay" style="
+        position:absolute;inset:0;z-index:0;pointer-events:none;
+        background:linear-gradient(to bottom, rgba(8,13,11,0.72) 0%, rgba(8,13,11,0.88) 60%, rgba(8,13,11,0.97) 100%);
+        opacity:0;transition:opacity 0.8s ease;border-radius:18px;
+      "></div>
 
       <div class="profile-area">
         <div class="avatar-wrap">
@@ -749,9 +903,12 @@ canvas#bg {
         <div class="name-row">
           <div class="name-block">
             <h1>exi</h1>
-            <div class="pronouns">he / him</div>
+            <div class="pronouns"><span id="discordHandle">@moneymoneyrain | he / him</span></div>
           </div>
-          <div class="tag">scholar of dorktown</div>
+          <div class="tags-row">
+            <div class="tag">scholar of dorktown</div>
+            <div class="tag" id="ageTag">17</div>
+          </div>
         </div>
 
         <div class="badges">
@@ -812,8 +969,10 @@ canvas#bg {
         <img src="images/berserk.png" alt="manga">
       </div>
     </div>
-    <div class="fav-title">Berserk</div>
-    <div class="fav-subtitle">Manga</div>
+    <div class="fav-hover-overlay">
+      <div class="fav-hover-title">Berserk</div>
+      <div class="fav-hover-sub">Manga</div>
+    </div>
   </div>
 
   <div class="fav-item">
@@ -822,8 +981,10 @@ canvas#bg {
         <img src="images/aot.png" alt="aot">
       </div>
     </div>
-    <div class="fav-title">Attack On Titan</div>
-    <div class="fav-subtitle">Anime</div>
+    <div class="fav-hover-overlay">
+      <div class="fav-hover-title">Attack On Titan</div>
+      <div class="fav-hover-sub">Anime</div>
+    </div>
   </div>
 
   <div class="fav-item">
@@ -832,8 +993,10 @@ canvas#bg {
         <img src="images/twd.png" alt="twd">
       </div>
     </div>
-    <div class="fav-title">The Walking Dead</div>
-    <div class="fav-subtitle">Comic</div>
+    <div class="fav-hover-overlay">
+      <div class="fav-hover-title">The Walking Dead</div>
+      <div class="fav-hover-sub">Comic</div>
+    </div>
   </div>
 
   <div class="fav-item">
@@ -842,8 +1005,10 @@ canvas#bg {
         <img src="images/bb.png" alt="breaking bad">
       </div>
     </div>
-    <div class="fav-title">Breaking Bad</div>
-    <div class="fav-subtitle">TV Show</div>
+    <div class="fav-hover-overlay">
+      <div class="fav-hover-title">Breaking Bad</div>
+      <div class="fav-hover-sub">TV Show</div>
+    </div>
   </div>
 
   <div class="fav-item">
@@ -852,8 +1017,10 @@ canvas#bg {
         <img src="images/cat2.png" alt="stray cat">
       </div>
     </div>
-    <div class="fav-title">The Stray Cat</div>
-    <div class="fav-subtitle">Animal</div>
+    <div class="fav-hover-overlay">
+      <div class="fav-hover-title">The Stray Cat</div>
+      <div class="fav-hover-sub">Animal</div>
+    </div>
   </div>
 
   <div class="fav-item">
@@ -862,8 +1029,10 @@ canvas#bg {
         <img src="images/dbh.png" alt="Detroit Become Human">
       </div>
     </div>
-    <div class="fav-title">Detroit Become Human</div>
-    <div class="fav-subtitle">Video Game</div>
+    <div class="fav-hover-overlay">
+      <div class="fav-hover-title">Detroit Become Human</div>
+      <div class="fav-hover-sub">Video Game</div>
+    </div>
   </div>
 </div>
       </div>
@@ -966,17 +1135,76 @@ function setActivity(data) {
   const custom = acts.find(a => a.type === 4);
 
   if (rich) {
+    window._typingPaused = true;
     activityText.textContent = '🎮 ' + rich.name;
-  } else if (custom && custom.state) {
-    activityText.textContent = custom.state;
   } else {
-    activityText.textContent = 'online and very bored';
+    window._typingPaused = false;
+    if (custom && custom.state && window._typingPhrases) {
+      if (window._typingPhrases[0] !== custom.state) {
+        window._typingPhrases.unshift(custom.state);
+        if (window._typingPhrases.length > 6) window._typingPhrases.pop();
+      }
+    }
   }
+}
+
+function setGameBg(activity) {
+  const gameBg = document.getElementById('gameBg');
+  const gameBgOverlay = document.getElementById('gameBgOverlay');
+  if (!gameBg || !gameBgOverlay) return;
+
+  if (!activity) {
+    gameBg.style.opacity = '0';
+    gameBgOverlay.style.opacity = '0';
+    return;
+  }
+
+  // Try large_image asset from Rich Presence
+  const assets = activity.assets;
+  let imgUrl = null;
+
+  if (assets && assets.large_image) {
+    const li = assets.large_image;
+    if (li.startsWith('mp:external/')) {
+      // External image (e.g. Steam/Epic cover art)
+      imgUrl = 'https://media.discordapp.net/' + li.replace('mp:', '');
+    } else if (li.startsWith('https://')) {
+      imgUrl = li;
+    } else {
+      // Discord application asset
+      imgUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${li}.png`;
+    }
+  }
+
+  if (!imgUrl) {
+    gameBg.style.opacity = '0';
+    gameBgOverlay.style.opacity = '0';
+    return;
+  }
+
+  const testImg = new Image();
+  testImg.onload = () => {
+    gameBg.style.backgroundImage = `url('${imgUrl}')`;
+    gameBg.style.opacity = '1';
+    gameBgOverlay.style.opacity = '1';
+  };
+  testImg.onerror = () => {
+    gameBg.style.opacity = '0';
+    gameBgOverlay.style.opacity = '0';
+  };
+  testImg.src = imgUrl;
 }
 
 function applyLanyardData(d) {
   if (d.discord_user) {
     const u = d.discord_user;
+
+    const handleEl = document.getElementById('discordHandle');
+    if (handleEl) {
+      const uname = u.username || 'moneymoneyrain';
+      handleEl.textContent = '@' + uname + ' | he / him';
+    }
+
     if (u.avatar) {
       const ext = u.avatar.startsWith('a_') ? 'gif' : 'png';
       const url = `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.${ext}?size=128`;
@@ -999,6 +1227,10 @@ function applyLanyardData(d) {
 
   setStatus(d.discord_status ?? 'offline');
   setActivity(d);
+
+  const acts = d.activities ?? [];
+  const rich = acts.find(a => a.type === 0);
+  setGameBg(rich || null);
 }
 
 function connectLanyard() {
@@ -1020,7 +1252,6 @@ function connectLanyard() {
     clearInterval(heartbeatInterval);
     setTimeout(connectLanyard, 5000);
     setStatus('offline');
-    activityText.textContent = 'online and very bored';
   });
 
   ws.addEventListener('error', () => ws.close());
@@ -1035,6 +1266,130 @@ fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
     setStatus('offline');
   })
   .finally(() => connectLanyard());
+
+document.addEventListener('contextmenu', function(e) {
+  if (e.target.tagName === 'IMG') e.preventDefault();
+});
+
+(function() {
+  const born = new Date(2008, 0, 1);
+  const now = new Date();
+  let age = now.getFullYear() - born.getFullYear();
+  const bday = new Date(now.getFullYear(), 0, 1);
+  if (now < bday) age--;
+  const el = document.getElementById('ageTag');
+  if (el) el.textContent = age;
+})();
+</script>
+
+<script>
+(function() {
+  const el = document.getElementById('activityText');
+  const phrases = window._typingPhrases = [
+    "im offline but hit me up.",
+    "mouthwashing is a good game",
+    "online and very bored",
+  ];
+  let pi = 0, ci = 0, deleting = false;
+  let cursorVisible = true;
+
+  setInterval(() => {
+    if (window._typingPaused) return;
+    const base = el.textContent.replace(/\|$/, '');
+    cursorVisible = !cursorVisible;
+    el.textContent = cursorVisible ? base + '|' : base;
+  }, 530);
+
+  function tick() {
+    if (window._typingPaused) { setTimeout(tick, 300); return; }
+    const phrase = phrases[pi % phrases.length];
+    if (!deleting) {
+      ci++;
+      el.textContent = phrase.slice(0, ci);
+      if (ci === phrase.length) {
+        deleting = true;
+        setTimeout(tick, 2200);
+        return;
+      }
+      setTimeout(tick, 52 + Math.random() * 38);
+    } else {
+      ci--;
+      el.textContent = phrase.slice(0, ci);
+      if (ci === 0) {
+        deleting = false;
+        pi = (pi + 1) % phrases.length;
+        setTimeout(tick, 420);
+        return;
+      }
+      setTimeout(tick, 28 + Math.random() * 18);
+    }
+  }
+  setTimeout(tick, 1000);
+})();
+
+(function() {
+  const isMobile = window.matchMedia('(max-width: 600px)').matches ||
+                   (('ontouchstart' in window) && !window.matchMedia('(hover: hover)').matches);
+  if (isMobile) return;
+
+  const EXCLUDE = 'a, button, input, textarea, select, img, .badge, .badge-tip, .bio-text, .works-grid, .social-list, .loved-list, .fav-grid, .activity-text, .disturb-label, h1, .pronouns, .name-block, .tag, .badges, .works-empty, .works-col-label';
+
+  const targets = [
+    ...document.querySelectorAll('.panel-box'),
+    document.querySelector('.card')
+  ].filter(Boolean);
+
+  targets.forEach(function(box) {
+    let isDragging = false;
+    let startX = 0, startY = 0, tx = 0, ty = 0;
+    let rafId = null;
+
+    box.style.position = 'relative';
+    box.style.willChange = 'transform';
+    box.style.cursor = 'grab';
+
+    box.addEventListener('mousedown', function(e) {
+      if (e.button !== 0) return;
+      if (e.target.closest(EXCLUDE)) return;
+      isDragging = true;
+      startX = e.clientX - tx;
+      startY = e.clientY - ty;
+      box.style.cursor = 'grabbing';
+      box.style.zIndex = '500';
+      box.style.transition = 'none';
+      cancelAnimationFrame(rafId);
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (!isDragging) return;
+      tx = e.clientX - startX;
+      ty = e.clientY - startY;
+      box.style.transform = `translate(${tx}px, ${ty}px)`;
+    });
+
+    document.addEventListener('mouseup', function() {
+      if (!isDragging) return;
+      isDragging = false;
+      box.style.cursor = 'grab';
+      cancelAnimationFrame(rafId);
+
+      function springBack() {
+        tx *= 0.76;
+        ty *= 0.76;
+        if (Math.abs(tx) < 0.3 && Math.abs(ty) < 0.3) {
+          tx = 0; ty = 0;
+          box.style.transform = 'translate(0px, 0px)';
+          box.style.zIndex = '';
+          return;
+        }
+        box.style.transform = `translate(${tx}px, ${ty}px)`;
+        rafId = requestAnimationFrame(springBack);
+      }
+      rafId = requestAnimationFrame(springBack);
+    });
+  });
+})();
 </script>
 </body>
 </html>
