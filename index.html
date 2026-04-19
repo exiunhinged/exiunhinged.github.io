@@ -13,6 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAACG0PgAAAAAAABVmgA6l8gAUarZAESErwBiuukAPmmGAAE3bQAud50AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERERERERERERERERERiIgRERERERh1WYgRERERiVNDOYgRERGDVkRTmYERESRgBEQ5mBERI2AGREN4ERESRmZEQzgREREpVENEMhERERIilDUhEREREREiIhERERERERERERERERERERERERERERERERERERERERERH//wAA//8AAPD/AADgPwAAwA8AAMAHAADAAwAAwAMAAOADAADwAwAA+AcAAP8PAAD//wAA//8AAP//AAD//wAA" rel="icon" type="image/x-icon">
 <link rel="preload" as="image" href="images/cat2.png">
+<link rel="preload" as="image" href="images/chitandaeru.png">
 <style>
 img {
   -webkit-user-drag: none;
@@ -559,12 +560,13 @@ canvas#bg {
   gap: 8px;
   padding: 0 14px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.17);
   border-radius: 12px;
-  margin-bottom: 18px;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+  position: relative;
+  z-index: 1;
 }
 
 .activity-text {
@@ -748,6 +750,71 @@ canvas#bg {
   .status-bar { box-shadow: none; }
 }
 
+.status-bar-wrap {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.status-eyes {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.status-eyes::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.55);
+  border-radius: 12px;
+}
+
+.status-eyes img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+.buttons-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 20px;
+  padding: 16px;
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  box-shadow:
+    0 0 0 0.5px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    0 6px 30px rgba(0,0,0,0.38);
+}
+
+.buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 88px);
+  grid-template-rows: repeat(4, 31px);
+  gap: 8px;
+  justify-content: center;
+}
+
+.btn-slot {
+  width: 88px;
+  height: 31px;
+  overflow: hidden;
+}
+
+.btn-slot img {
+  width: 88px;
+  height: 31px;
+  object-fit: cover;
+  display: block;
+}
+
 .glow-border {
   animation: border-glow 5s ease-in-out infinite;
 }
@@ -878,18 +945,6 @@ canvas#bg {
         <img src="images/banner.gif" id="bannerImg" alt="banner" style="width:100%;height:100%;object-fit:cover">
       </div>
 
-      <div id="gameBg" style="
-        position:absolute;inset:0;z-index:0;pointer-events:none;
-        background-size:cover;background-position:center;
-        opacity:0;transition:opacity 0.8s ease;
-        border-radius:18px;overflow:hidden;
-      "></div>
-      <div id="gameBgOverlay" style="
-        position:absolute;inset:0;z-index:0;pointer-events:none;
-        background:linear-gradient(to bottom, rgba(8,13,11,0.72) 0%, rgba(8,13,11,0.88) 60%, rgba(8,13,11,0.97) 100%);
-        opacity:0;transition:opacity 0.8s ease;border-radius:18px;
-      "></div>
-
       <div class="profile-area">
         <div class="avatar-wrap">
           <div class="avatar">
@@ -929,9 +984,14 @@ canvas#bg {
 
       <div class="card-body">
 
-        <div class="status-bar">
-          <div class="activity-text" id="activityText">online and very bored</div>
-          <div class="disturb-label">disturb me</div>
+        <div class="status-bar-wrap">
+          <div class="status-eyes">
+            <img src="images/chitandaeru.png" alt="">
+          </div>
+          <div class="status-bar">
+            <div class="activity-text" id="activityText">online and very bored</div>
+            <div class="disturb-label">disturb me</div>
+          </div>
         </div>
 
         <div class="divider"></div>
@@ -1036,8 +1096,20 @@ canvas#bg {
   </div>
 </div>
       </div>
-    </div>
 
+      <div class="panel-box buttons-box">
+        <div class="buttons-grid">
+          <div class="btn-slot"><img src="images/168.gif"></div>
+          <div class="btn-slot"><img src="images/184.gif"></div>
+          <div class="btn-slot"><img src="images/anime_eyes.gif"></div>
+          <div class="btn-slot"><img src="images/mobilefriendly.png"></div>
+          <div class="btn-slot"><img src="images/raymond.gif"></div>
+          <div class="btn-slot"><img src="images/nowebp.gif"></div>
+          <div class="btn-slot"><img src="images/minecraft.gif"></div>
+          <div class="btn-slot"><img src="images/piracy.gif"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1148,53 +1220,6 @@ function setActivity(data) {
   }
 }
 
-function setGameBg(activity) {
-  const gameBg = document.getElementById('gameBg');
-  const gameBgOverlay = document.getElementById('gameBgOverlay');
-  if (!gameBg || !gameBgOverlay) return;
-
-  if (!activity) {
-    gameBg.style.opacity = '0';
-    gameBgOverlay.style.opacity = '0';
-    return;
-  }
-
-  // Try large_image asset from Rich Presence
-  const assets = activity.assets;
-  let imgUrl = null;
-
-  if (assets && assets.large_image) {
-    const li = assets.large_image;
-    if (li.startsWith('mp:external/')) {
-      // External image (e.g. Steam/Epic cover art)
-      imgUrl = 'https://media.discordapp.net/' + li.replace('mp:', '');
-    } else if (li.startsWith('https://')) {
-      imgUrl = li;
-    } else {
-      // Discord application asset
-      imgUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${li}.png`;
-    }
-  }
-
-  if (!imgUrl) {
-    gameBg.style.opacity = '0';
-    gameBgOverlay.style.opacity = '0';
-    return;
-  }
-
-  const testImg = new Image();
-  testImg.onload = () => {
-    gameBg.style.backgroundImage = `url('${imgUrl}')`;
-    gameBg.style.opacity = '1';
-    gameBgOverlay.style.opacity = '1';
-  };
-  testImg.onerror = () => {
-    gameBg.style.opacity = '0';
-    gameBgOverlay.style.opacity = '0';
-  };
-  testImg.src = imgUrl;
-}
-
 function applyLanyardData(d) {
   if (d.discord_user) {
     const u = d.discord_user;
@@ -1228,9 +1253,6 @@ function applyLanyardData(d) {
   setStatus(d.discord_status ?? 'offline');
   setActivity(d);
 
-  const acts = d.activities ?? [];
-  const rich = acts.find(a => a.type === 0);
-  setGameBg(rich || null);
 }
 
 function connectLanyard() {
@@ -1334,13 +1356,8 @@ document.addEventListener('contextmenu', function(e) {
 
   const EXCLUDE = 'a, button, input, textarea, select, img, .badge, .badge-tip, .bio-text, .works-grid, .social-list, .loved-list, .fav-grid, .activity-text, .disturb-label, h1, .pronouns, .name-block, .tag, .badges, .works-empty, .works-col-label';
 
-  const targets = [
-    ...document.querySelectorAll('.panel-box'),
-    document.querySelector('.card')
-  ].filter(Boolean);
-
-  targets.forEach(function(box) {
-    let isDragging = false;
+  function makeDraggable(box) {
+    let dragging = false;
     let startX = 0, startY = 0, tx = 0, ty = 0;
     let rafId = null;
 
@@ -1351,7 +1368,7 @@ document.addEventListener('contextmenu', function(e) {
     box.addEventListener('mousedown', function(e) {
       if (e.button !== 0) return;
       if (e.target.closest(EXCLUDE)) return;
-      isDragging = true;
+      dragging = true;
       startX = e.clientX - tx;
       startY = e.clientY - ty;
       box.style.cursor = 'grabbing';
@@ -1362,33 +1379,33 @@ document.addEventListener('contextmenu', function(e) {
     });
 
     document.addEventListener('mousemove', function(e) {
-      if (!isDragging) return;
+      if (!dragging) return;
       tx = e.clientX - startX;
       ty = e.clientY - startY;
       box.style.transform = `translate(${tx}px, ${ty}px)`;
     });
 
     document.addEventListener('mouseup', function() {
-      if (!isDragging) return;
-      isDragging = false;
+      if (!dragging) return;
+      dragging = false;
       box.style.cursor = 'grab';
       cancelAnimationFrame(rafId);
-
-      function springBack() {
-        tx *= 0.76;
-        ty *= 0.76;
+      (function spring() {
+        tx *= 0.76; ty *= 0.76;
         if (Math.abs(tx) < 0.3 && Math.abs(ty) < 0.3) {
           tx = 0; ty = 0;
-          box.style.transform = 'translate(0px, 0px)';
+          box.style.transform = 'translate(0,0)';
           box.style.zIndex = '';
           return;
         }
-        box.style.transform = `translate(${tx}px, ${ty}px)`;
-        rafId = requestAnimationFrame(springBack);
-      }
-      rafId = requestAnimationFrame(springBack);
+        box.style.transform = `translate(${tx}px,${ty}px)`;
+        rafId = requestAnimationFrame(spring);
+      })();
     });
-  });
+  }
+
+  [...document.querySelectorAll('.panel-box'), document.querySelector('.card')]
+    .filter(Boolean).forEach(makeDraggable);
 })();
 </script>
 </body>
