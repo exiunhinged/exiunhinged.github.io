@@ -6,7 +6,7 @@
 <title>exi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#0a0a0a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,7 +17,6 @@
 <style>
 img {
   -webkit-user-drag: none;
-  user-drag: none;
   -webkit-user-select: none;
   user-select: none;
 }
@@ -29,17 +28,17 @@ img {
 }
 
 :root {
-  --mint: #4ecca3;
-  --mint-dim: #2a9d7a;
-  --mint-glow: rgba(78, 204, 163, 0.35);
-  --mint-faint: rgba(78, 204, 163, 0.08);
+  --blue: #5bc4f5;
+  --blue-dim: #6592a8;
+  --blue-glow: rgba(91, 196, 245, 0.35);
+  --blue-faint: rgba(91, 196, 245, 0.08);
   --black: #0a0a0a;
   --card-bg: rgba(255, 255, 255, 0.04);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-shine: rgba(255, 255, 255, 0.07);
-  --border: rgba(78, 204, 163, 0.18);
-  --text: #d4f0e8;
-  --text-muted: #7ab8a4;
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-shine: rgba(255, 255, 255, 0.12);
+  --border: rgba(91, 196, 245, 0.18);
+  --text: #d4eef8;
+  --text-muted: #7aaec8;
 }
 
 html, body {
@@ -50,11 +49,14 @@ html, body {
   overflow-x: hidden;
 }
 
-canvas#bg {
+.bg-media {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .page-wrap {
@@ -88,43 +90,47 @@ canvas#bg {
   flex: 1;
   min-width: 0;
   max-width: 640px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(180, 220, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1px solid rgba(255, 255, 255, 0.38);
   border-radius: 22px;
   overflow: hidden;
   position: relative;
   box-shadow:
-    0 0 0 0.5px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.1),
-    0 8px 40px rgba(0,0,0,0.45),
-    0 0 60px rgba(78,204,163,0.05);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+    0 0 0 0.5px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 0 40px rgba(180,220,255,0.04),
+    0 8px 40px rgba(0,0,0,0.5),
+    0 0 60px rgba(91,196,245,0.06);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
 }
 
 .panel-box {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(180, 220, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1px solid rgba(255, 255, 255, 0.38);
   border-radius: 20px;
   padding: 16px;
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
   box-shadow:
-    0 0 0 0.5px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.1),
-    0 6px 30px rgba(0,0,0,0.38);
+    0 0 0 0.5px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 0 30px rgba(180,220,255,0.04),
+    0 6px 30px rgba(0,0,0,0.4);
 }
 
 .section-label {
   font-family: 'Syne', sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.25em;
+  font-size: 11px;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--mint-dim);
+  color: var(--blue);
   margin-bottom: 14px;
-  font-weight: 600;
+  font-weight: 700;
+  opacity: 0.95;
+  text-shadow: 0 0 10px rgba(91, 196, 245, 0.3);
 }
 
 .social-list {
@@ -148,17 +154,17 @@ canvas#bg {
 }
 
 .social-item:hover {
-  border-color: rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.07);
-  color: var(--mint);
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--blue);
 }
 
 .social-icon {
   width: 28px;
   height: 28px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,7 +179,7 @@ canvas#bg {
 }
 
 .social-item:hover .social-icon svg {
-  fill: var(--mint);
+  fill: var(--blue);
 }
 
 .loved-list {
@@ -200,7 +206,7 @@ canvas#bg {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--mint-dim);
+  background: var(--blue-dim);
   flex-shrink: 0;
   margin-top: 4px;
   opacity: 0.7;
@@ -213,7 +219,7 @@ canvas#bg {
 
 .loved-link:hover {
   cursor: pointer;
-  color: var(--mint);
+  color: var(--blue);
 }
 
 .fav-grid {
@@ -223,9 +229,9 @@ canvas#bg {
 }
 
 .fav-item {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(180, 220, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.32);
   border-radius: 14px;
   aspect-ratio: 1 / 1.15;
   display: flex;
@@ -237,13 +243,13 @@ canvas#bg {
   position: relative;
   overflow: hidden;
   transition: border-color 0.2s, box-shadow 0.2s;
-  cursor: default;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 16px rgba(0,0,0,0.3);
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 4px 16px rgba(0,0,0,0.3);
 }
 
 .fav-item:hover {
-  border-color: rgba(255, 255, 255, 0.25);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 20px rgba(0,0,0,0.4), 0 0 14px rgba(78,204,163,0.15);
+  border-color: rgba(255, 255, 255, 0.38);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 20px rgba(0,0,0,0.4), 0 0 14px rgba(91,196,245,0.18);
 }
 
 .fav-placeholder {
@@ -270,39 +276,10 @@ canvas#bg {
   display: block;
 }
 
-.fav-placeholder-icon svg {
-  width: 26px;
-  height: 26px;
-  fill: var(--mint);
-}
-
-.fav-title {
-  font-size: 10px;
-  color: var(--text);
-  font-family: 'Syne', sans-serif;
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: 0.04em;
-  position: relative;
-  z-index: 1;
-  display: none;
-}
-
-.fav-subtitle {
-  font-size: 9px;
-  color: var(--text-muted);
-  opacity: 0.65;
-  text-align: center;
-  letter-spacing: 0.06em;
-  position: relative;
-  z-index: 1;
-  display: none;
-}
-
 .fav-hover-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(5,14,10,0.92) 0%, rgba(5,14,10,0.55) 55%, transparent 100%);
+  background: linear-gradient(to top, rgba(5,10,18,0.92) 0%, rgba(5,10,18,0.55) 55%, transparent 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -327,7 +304,7 @@ canvas#bg {
 
 .fav-hover-overlay .fav-hover-sub {
   font-size: 9px;
-  color: var(--mint);
+  color: var(--blue);
   opacity: 0.85;
   text-align: center;
   letter-spacing: 0.08em;
@@ -337,26 +314,144 @@ canvas#bg {
   opacity: 1;
 }
 
-.banner {
-  width: 100%;
-  height: 148px;
-  background: linear-gradient(135deg, #060d09 0%, #080d0b 50%, #061210 100%);
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
+.fav-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
 }
 
-.banner::before {
+.fav-modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.fav-modal {
+  background: rgba(180, 220, 255, 0.1);
+  border: 1px solid rgba(255,255,255,0.28);
+  border-top: 1px solid rgba(255,255,255,0.45);
+  border-radius: 22px;
+  box-shadow:
+    0 0 0 0.5px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.2),
+    inset 0 0 40px rgba(180,220,255,0.05),
+    0 20px 60px rgba(0,0,0,0.55),
+    0 0 60px rgba(91,196,245,0.08);
+  backdrop-filter: blur(48px) saturate(220%);
+  -webkit-backdrop-filter: blur(48px) saturate(220%);
+  width: 90%;
+  max-width: 480px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 0;
+  transform: scale(0.95) translateY(10px);
+  transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1);
+  position: relative;
+}
+
+.fav-modal-overlay.open .fav-modal {
+  transform: scale(1) translateY(0);
+}
+
+.fav-modal-cover {
+  width: 100%;
+  height: 160px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px 22px 0 0;
+}
+
+.fav-modal-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.fav-modal-cover::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 18px,
-    rgba(78,204,163,0.03) 18px,
-    rgba(78,204,163,0.03) 19px
-  );
+  background: linear-gradient(to bottom, transparent 40%, rgba(10,15,25,0.85) 100%);
+}
+
+.fav-modal-body {
+  padding: 20px 24px 28px;
+}
+
+.fav-modal-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.fav-modal-sub {
+  font-size: 10px;
+  color: var(--blue);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-family: 'Syne', sans-serif;
+  margin-bottom: 16px;
+  opacity: 0.85;
+}
+
+.fav-modal-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 14px 0;
+}
+
+.fav-modal-desc {
+  font-size: 12px;
+  line-height: 1.85;
+  color: var(--text);
+  opacity: 0.85;
+}
+
+.fav-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: background 0.18s;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.fav-modal-close:hover {
+  background: rgba(91,196,245,0.25);
+  border-color: var(--blue);
+}
+
+.banner {
+  width: 100%;
+  height: 148px;
+  background: #060d14;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
 }
 
 .profile-area {
@@ -375,26 +470,49 @@ canvas#bg {
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  border: 4px solid rgba(255,255,255,0.08);
-  background: linear-gradient(135deg, #0d1a14 0%, #0a2018 100%);
+  border: 4px solid rgba(255,255,255,0.12);
+  background: linear-gradient(135deg, #0d1520 0%, #0a1828 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   position: relative;
-  transition: box-shadow 0.3s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: box-shadow 0.3s ease;
 }
 
 .avatar:hover {
-  box-shadow: 0 0 0 2px var(--mint), 0 0 18px var(--mint-glow);
-  transform: rotate(360deg) scale(1.06);
+  box-shadow: 0 0 0 2px #f04747, 0 0 18px rgba(240,71,71,0.4);
 }
 
-@keyframes avatar-spin {
-  0% { transform: rotate(0deg) scale(1); }
-  60% { transform: rotate(370deg) scale(1.07); }
-  80% { transform: rotate(355deg) scale(1.05); }
-  100% { transform: rotate(360deg) scale(1.06); }
+.avatar-angry {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.avatar:hover .avatar-angry {
+  display: block;
+  animation: angry-shake 0.08s linear infinite;
+}
+
+@keyframes angry-shake {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  15%  { transform: translate(-3px, -2px) rotate(-2deg); }
+  30%  { transform: translate(3px, 1px) rotate(2deg); }
+  45%  { transform: translate(-2px, 2px) rotate(-1deg); }
+  60%  { transform: translate(3px, -1px) rotate(1.5deg); }
+  75%  { transform: translate(-3px, 1px) rotate(-2deg); }
+  90%  { transform: translate(2px, 2px) rotate(1deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.avatar:hover #avatarImg,
+.avatar:hover #avatarSkeleton {
+  opacity: 0 !important;
 }
 
 .avatar-status {
@@ -452,8 +570,8 @@ canvas#bg {
   width: 30px;
   height: 30px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -464,8 +582,8 @@ canvas#bg {
 }
 
 .badge:hover {
-  border-color: var(--mint);
-  box-shadow: 0 0 10px var(--mint-glow);
+  border-color: var(--blue);
+  box-shadow: 0 0 10px var(--blue-glow);
 }
 
 .badge-img {
@@ -480,8 +598,8 @@ canvas#bg {
   left: 50%;
   transform: translateX(-50%);
   background: #0a0a0a;
-  border: 1px solid var(--mint-dim);
-  color: var(--mint);
+  border: 1px solid var(--blue-dim);
+  color: var(--blue);
   font-size: 10px;
   padding: 4px 8px;
   border-radius: 6px;
@@ -500,7 +618,7 @@ canvas#bg {
   left: 50%;
   transform: translateX(-50%);
   border: 5px solid transparent;
-  border-top-color: var(--mint-dim);
+  border-top-color: var(--blue-dim);
 }
 
 .badge:hover .badge-tip {
@@ -543,9 +661,10 @@ canvas#bg {
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--mint-dim);
+  color: var(--blue);
   margin-bottom: 8px;
-  opacity: 0.7;
+  opacity: 0.9;
+  font-weight: 700;
 }
 
 .card-body {
@@ -560,11 +679,11 @@ canvas#bg {
   gap: 8px;
   padding: 0 14px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.17);
+  background: rgba(180, 220, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 12px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
   position: relative;
   z-index: 1;
 }
@@ -607,8 +726,8 @@ canvas#bg {
   left: 50%;
   transform: translateX(-50%) translateY(6px);
   background: #0a0a0a;
-  border: 1px solid var(--mint-dim);
-  color: var(--mint);
+  border: 1px solid var(--blue-dim);
+  color: var(--blue);
   font-size: 11px;
   padding: 5px 10px;
   border-radius: 10px;
@@ -671,8 +790,6 @@ canvas#bg {
 }
 
 @media (max-width: 600px) {
-  canvas#bg { display: none; }
-
   .pet { display: none; }
 
   .card             { order: 1; }
@@ -681,50 +798,41 @@ canvas#bg {
 
   .card {
     margin-top: 0;
-    background: rgba(20, 28, 24, 0.88);
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
-    box-shadow: 0 0 0 0.5px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+    background: rgba(20, 30, 45, 0.88);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    box-shadow: 0 0 0 0.5px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12);
     animation: none;
   }
 
   .panel-box {
-    background: rgba(20, 28, 24, 0.82);
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
-    box-shadow: 0 0 0 0.5px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.07);
+    background: rgba(20, 30, 45, 0.82);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    box-shadow: 0 0 0 0.5px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
   }
 
   .fav-item {
-    background: rgba(255,255,255,0.06);
+    background: rgba(180,220,255,0.08);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.07);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
   }
 
   .glow-border { animation: none; }
-
-  .pet-body    { animation: none; }
-
   .avatar { transition: none; }
   .avatar:hover { box-shadow: none; transform: none; }
-
   .avatar-status.online  { box-shadow: none; }
   .avatar-status.idle    { box-shadow: none; }
   .avatar-status.dnd     { box-shadow: none; }
-
   .badge:hover { box-shadow: none; }
-  .fav-item:hover { box-shadow: none; border-color: rgba(255,255,255,0.12); }
-
+  .fav-item:hover { box-shadow: none; border-color: rgba(255,255,255,0.2); }
   .works-grid { grid-template-columns: 1fr; }
   .name-block h1 { font-size: 22px; }
-
   .page-wrap  { padding: 0 12px 100px; }
   .card-body  { padding: 16px 18px 22px; }
   .profile-area { padding: 0 18px; }
-
-  .avatar-skeleton { animation: none; background: #132418; }
-
+  .avatar-skeleton { animation: none; background: #132030; }
   .fav-grid { grid-template-columns: 1fr; }
   .fav-item { aspect-ratio: unset; flex-direction: row; justify-content: flex-start; padding: 8px 10px; gap: 10px; min-height: 64px; transition: none; }
   .fav-placeholder { position: relative; inset: auto; width: 46px; height: 46px; flex-shrink: 0; border-radius: 6px; overflow: hidden; }
@@ -781,16 +889,16 @@ canvas#bg {
 }
 
 .buttons-box {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(180, 220, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1px solid rgba(255, 255, 255, 0.38);
   border-radius: 20px;
   padding: 16px;
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
   box-shadow:
-    0 0 0 0.5px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.1),
+    0 0 0 0.5px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.18),
     0 6px 30px rgba(0,0,0,0.38);
 }
 
@@ -823,16 +931,16 @@ canvas#bg {
   0%, 100% {
     box-shadow:
       0 0 0 0.5px rgba(0,0,0,0.5),
-      inset 0 1px 0 rgba(255,255,255,0.1),
+      inset 0 1px 0 rgba(255,255,255,0.18),
       0 8px 40px rgba(0,0,0,0.45),
-      0 0 40px rgba(78,204,163,0.04);
+      0 0 40px rgba(91,196,245,0.05);
   }
   50% {
     box-shadow:
       0 0 0 0.5px rgba(0,0,0,0.5),
-      inset 0 1px 0 rgba(255,255,255,0.14),
+      inset 0 1px 0 rgba(255,255,255,0.22),
       0 8px 50px rgba(0,0,0,0.5),
-      0 0 70px rgba(78,204,163,0.09);
+      0 0 70px rgba(91,196,245,0.12);
   }
 }
 
@@ -859,7 +967,7 @@ canvas#bg {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(90deg, #0d1a14 25%, #132418 50%, #0d1a14 75%);
+  background: linear-gradient(90deg, #0d1520 25%, #132030 50%, #0d1520 75%);
   background-size: 200% 100%;
   animation: shimmer 1.4s infinite;
 }
@@ -872,7 +980,7 @@ canvas#bg {
 </head>
 <body>
 
-<canvas id="bg"></canvas>
+<img class="bg-media" src="images/rain.gif" id="bgMedia" alt="">
 
 <div class="page-wrap">
   <div class="layout-row">
@@ -951,6 +1059,7 @@ canvas#bg {
             <div class="avatar-skeleton" id="avatarSkeleton"></div>
             <img src="images/avatar.jpg" id="avatarImg" alt="avatar"
                  style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity 0.4s;">
+            <img src="images/angry.png" alt="angry" class="avatar-angry">
           </div>
           <div class="avatar-status offline" id="avatarStatus"></div>
         </div>
@@ -967,8 +1076,8 @@ canvas#bg {
         </div>
 
         <div class="badges">
-          <div class="badge">
-            <img src="images/gamer.png" alt="badge 1" class="badge-img">
+          <div class="badge" style="width:38px;height:38px;">
+            <img src="images/gamer.png" alt="badge 1" class="badge-img" style="width:30px;height:30px;">
             <div class="badge-tip">Fake Gamer</div>
           </div>
           <div class="badge">
@@ -1023,7 +1132,7 @@ canvas#bg {
         <div class="section-label">favourites</div>
         <div class="fav-grid">
 
-  <div class="fav-item">
+  <div class="fav-item" data-fav="0">
     <div class="fav-placeholder">
       <div class="fav-placeholder-icon">
         <img src="images/berserk.png" alt="manga">
@@ -1035,7 +1144,7 @@ canvas#bg {
     </div>
   </div>
 
-  <div class="fav-item">
+  <div class="fav-item" data-fav="1">
     <div class="fav-placeholder">
       <div class="fav-placeholder-icon">
         <img src="images/aot.png" alt="aot">
@@ -1047,7 +1156,7 @@ canvas#bg {
     </div>
   </div>
 
-  <div class="fav-item">
+  <div class="fav-item" data-fav="2">
     <div class="fav-placeholder">
       <div class="fav-placeholder-icon">
         <img src="images/twd.png" alt="twd">
@@ -1059,7 +1168,7 @@ canvas#bg {
     </div>
   </div>
 
-  <div class="fav-item">
+  <div class="fav-item" data-fav="3">
     <div class="fav-placeholder">
       <div class="fav-placeholder-icon">
         <img src="images/bb.png" alt="breaking bad">
@@ -1071,7 +1180,7 @@ canvas#bg {
     </div>
   </div>
 
-  <div class="fav-item">
+  <div class="fav-item" data-fav="4">
     <div class="fav-placeholder">
       <div class="fav-placeholder-icon">
         <img src="images/cat2.png" alt="stray cat">
@@ -1083,7 +1192,7 @@ canvas#bg {
     </div>
   </div>
 
-  <div class="fav-item">
+  <div class="fav-item" data-fav="5">
     <div class="fav-placeholder">
       <div class="fav-placeholder-icon">
         <img src="images/dbh.png" alt="Detroit Become Human">
@@ -1094,6 +1203,7 @@ canvas#bg {
       <div class="fav-hover-sub">Video Game</div>
     </div>
   </div>
+
 </div>
       </div>
 
@@ -1120,49 +1230,93 @@ canvas#bg {
   </div>
 </div>
 
+<div class="fav-modal-overlay" id="favModalOverlay">
+  <div class="fav-modal" id="favModal">
+    <div class="fav-modal-close" id="favModalClose">✕</div>
+    <div class="fav-modal-cover">
+      <img src="" id="favModalImg" alt="">
+    </div>
+    <div class="fav-modal-body">
+      <div class="fav-modal-title" id="favModalTitle">Title</div>
+      <div class="fav-modal-sub" id="favModalSub">Subtitle</div>
+      <div class="fav-modal-divider"></div>
+      <div class="fav-modal-desc" id="favModalDesc"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 const isMobile = window.innerWidth <= 600 || ('ontouchstart' in window);
-const canvas = document.getElementById('bg');
 
-if (!isMobile) {
-  const ctx = canvas.getContext('2d');
-  let W, H, dots = [], mouse = { x: -999, y: -999 };
-
-  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-  function makeDots() {
-    dots = [];
-    let count = Math.floor((W * H) / 9000);
-    for (let i = 0; i < count; i++) {
-      dots.push({ x: Math.random()*W, y: Math.random()*H, ox:0, oy:0, r: Math.random()*2+1, base: Math.random()*0.18+0.06 });
-    }
-  }
-  function drawBg() {
-    let grad = ctx.createRadialGradient(W*0.3, H*0.2, 0, W*0.5, H*0.5, Math.max(W,H));
-    grad.addColorStop(0,'#080d0b'); grad.addColorStop(0.45,'#060a08');
-    grad.addColorStop(0.8,'#040807'); grad.addColorStop(1,'#030605');
-    ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
-  }
-  function lerp(a,b,t){ return a+(b-a)*t; }
-  function loop() {
-    drawBg();
-    const radius = 120;
-    for (let d of dots) {
-      let dx=d.x-mouse.x, dy=d.y-mouse.y, dist=Math.sqrt(dx*dx+dy*dy);
-      let tox=0, toy=0;
-      if (dist<radius) { let f=(1-dist/radius)*18; tox=(dx/dist)*f; toy=(dy/dist)*f; }
-      d.ox=lerp(d.ox,tox,0.08); d.oy=lerp(d.oy,toy,0.08);
-      let alpha=d.base+(Math.abs(d.ox)+Math.abs(d.oy))*0.012;
-      ctx.beginPath(); ctx.arc(d.x+d.ox, d.y+d.oy, d.r, 0, Math.PI*2);
-      ctx.fillStyle=`rgba(78,204,163,${Math.min(alpha,0.55)})`; ctx.fill();
-    }
-    requestAnimationFrame(loop);
-  }
-  window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
-  window.addEventListener('resize', ()=>{ resize(); makeDots(); });
-  resize(); makeDots(); loop();
-} else {
-  canvas.style.display = 'none';
+if (isMobile) {
+  const bg = document.getElementById('bgMedia');
+  bg.src = 'images/rain.jpg';
 }
+
+const FAV_DATA = [
+  {
+    title: 'Berserk',
+    sub: 'Manga',
+    img: 'images/berserk.png',
+    desc: 'Currently my favourite manga. Miura\'s art blew me off. R.I.P Miura. I can only hope Kouji Mori can do justice to the story. Not a big fan of the new art but yet I\'m in for the story. Fuck you Griffith!'
+  },
+  {
+    title: 'Attack On Titan',
+    sub: 'Anime',
+    img: 'images/aot.png',
+    desc: 'Peak. Very Peak. My first watch in 2020 didn\'t bare any fruit. I thought it was kind of mid. Then in February 2026 I rewatched and learned how much of a masterpiece it was.. 10/10 piece of media. Must Watch.'
+  },
+  {
+    title: 'The Walking Dead',
+    sub: 'Comic',
+    img: 'images/twd.png',
+    desc: 'I heard the comic was better than the live-action so I decided to give it a go. It\'s a bit too fast, like Kirkman\'s other works. But the comic captures as much as emotional depth as the series. And also the first good comic I read.'
+  },
+  {
+    title: 'Breaking Bad',
+    sub: 'TV Show',
+    img: 'images/bb.png',
+    desc: '"Waltuh. Put you dih away waltuh."~ Jokes aside, it had a reason to get awarded and liked by so many people. It is a masterpiece. Also must watch. I might rewatch tbh.'
+  },
+  {
+    title: 'The Stray Cat',
+    sub: 'Animal',
+    img: 'images/cat2.png',
+    desc: 'The neighbourhood stray I don\'t see anymore. I used to feed it but I wasn\'t allowed to keep it in the house. He was a good fella. Rocked me bollocks off.'
+  },
+  {
+    title: 'Detroit Become Human',
+    sub: 'Video Game',
+    img: 'images/dbh.png',
+    desc: 'I got the bad ending and almost cried. Not like weird and shitty tears. Like I failed my duty and it was so sad, I just looked at the ceiling in silence. Must play. I also like RDR2 FYI.'
+  }
+];
+
+const favOverlay = document.getElementById('favModalOverlay');
+const favModal   = document.getElementById('favModal');
+
+function openFavModal(idx) {
+  const d = FAV_DATA[idx];
+  document.getElementById('favModalImg').src   = d.img;
+  document.getElementById('favModalTitle').textContent = d.title;
+  document.getElementById('favModalSub').textContent   = d.sub;
+  document.getElementById('favModalDesc').textContent  = d.desc;
+  favOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFavModal() {
+  favOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('.fav-item').forEach(el => {
+  el.addEventListener('click', () => openFavModal(+el.dataset.fav));
+});
+
+document.getElementById('favModalClose').addEventListener('click', closeFavModal);
+favOverlay.addEventListener('click', e => { if (e.target === favOverlay) closeFavModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFavModal(); });
 
 const msgs = ['hewwo :3','purrr','mrrrow~','pet me!!','*bonks u*','bored too?','meow meow','*kneads*','i luv u','fuck you'];
 let lastMsg = 0;
@@ -1223,70 +1377,48 @@ function setActivity(data) {
 function applyLanyardData(d) {
   if (d.discord_user) {
     const u = d.discord_user;
-
     const handleEl = document.getElementById('discordHandle');
-    if (handleEl) {
-      const uname = u.username || 'moneymoneyrain';
-      handleEl.textContent = '@' + uname + ' | he / him';
-    }
+    if (handleEl) handleEl.textContent = '@' + (u.username || 'moneymoneyrain') + ' | he / him';
 
     if (u.avatar) {
       const ext = u.avatar.startsWith('a_') ? 'gif' : 'png';
       const url = `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.${ext}?size=128`;
       const img = new Image();
-      img.onload = () => {
-        avatarImg.src = url;
-        avatarImg.style.opacity = '1';
-        avatarSkeleton.style.display = 'none';
-      };
-      img.onerror = () => {
-        avatarImg.style.opacity = '1';
-        avatarSkeleton.style.display = 'none';
-      };
+      img.onload = () => { avatarImg.src = url; avatarImg.style.opacity = '1'; avatarSkeleton.style.display = 'none'; };
+      img.onerror = () => { avatarImg.style.opacity = '1'; avatarSkeleton.style.display = 'none'; };
       img.src = url;
     } else {
       avatarImg.style.opacity = '1';
       avatarSkeleton.style.display = 'none';
     }
   }
-
   setStatus(d.discord_status ?? 'offline');
   setActivity(d);
-
 }
 
 function connectLanyard() {
   const ws = new WebSocket('wss://api.lanyard.rest/socket');
   let heartbeatInterval;
-
   ws.addEventListener('message', e => {
     const msg = JSON.parse(e.data);
     if (msg.op === 1) {
       heartbeatInterval = setInterval(() => ws.send(JSON.stringify({ op: 3 })), msg.d.heartbeat_interval);
       ws.send(JSON.stringify({ op: 2, d: { subscribe_to_id: DISCORD_ID } }));
     }
-    if (msg.op === 0) {
-      applyLanyardData(msg.d);
-    }
+    if (msg.op === 0) applyLanyardData(msg.d);
   });
-
   ws.addEventListener('close', () => {
     clearInterval(heartbeatInterval);
     setTimeout(connectLanyard, 5000);
     setStatus('offline');
   });
-
   ws.addEventListener('error', () => ws.close());
 }
 
 fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
   .then(r => r.json())
   .then(json => { if (json.success) applyLanyardData(json.data); })
-  .catch(() => {
-    avatarImg.style.opacity = '1';
-    avatarSkeleton.style.display = 'none';
-    setStatus('offline');
-  })
+  .catch(() => { avatarImg.style.opacity = '1'; avatarSkeleton.style.display = 'none'; setStatus('offline'); })
   .finally(() => connectLanyard());
 
 document.addEventListener('contextmenu', function(e) {
@@ -1297,14 +1429,11 @@ document.addEventListener('contextmenu', function(e) {
   const born = new Date(2008, 0, 1);
   const now = new Date();
   let age = now.getFullYear() - born.getFullYear();
-  const bday = new Date(now.getFullYear(), 0, 1);
-  if (now < bday) age--;
+  if (now < new Date(now.getFullYear(), 0, 1)) age--;
   const el = document.getElementById('ageTag');
   if (el) el.textContent = age;
 })();
-</script>
 
-<script>
 (function() {
   const el = document.getElementById('activityText');
   const phrases = window._typingPhrases = [
@@ -1312,8 +1441,7 @@ document.addEventListener('contextmenu', function(e) {
     "mouthwashing is a good game",
     "online and very bored",
   ];
-  let pi = 0, ci = 0, deleting = false;
-  let cursorVisible = true;
+  let pi = 0, ci = 0, deleting = false, cursorVisible = true;
 
   setInterval(() => {
     if (window._typingPaused) return;
@@ -1328,21 +1456,12 @@ document.addEventListener('contextmenu', function(e) {
     if (!deleting) {
       ci++;
       el.textContent = phrase.slice(0, ci);
-      if (ci === phrase.length) {
-        deleting = true;
-        setTimeout(tick, 2200);
-        return;
-      }
+      if (ci === phrase.length) { deleting = true; setTimeout(tick, 2200); return; }
       setTimeout(tick, 52 + Math.random() * 38);
     } else {
       ci--;
       el.textContent = phrase.slice(0, ci);
-      if (ci === 0) {
-        deleting = false;
-        pi = (pi + 1) % phrases.length;
-        setTimeout(tick, 420);
-        return;
-      }
+      if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(tick, 420); return; }
       setTimeout(tick, 28 + Math.random() * 18);
     }
   }
@@ -1350,24 +1469,18 @@ document.addEventListener('contextmenu', function(e) {
 })();
 
 (function() {
-  const isMobile = window.matchMedia('(max-width: 600px)').matches ||
-                   (('ontouchstart' in window) && !window.matchMedia('(hover: hover)').matches);
   if (isMobile) return;
 
   const EXCLUDE = 'a, button, input, textarea, select, img, .badge, .badge-tip, .bio-text, .works-grid, .social-list, .loved-list, .fav-grid, .activity-text, .disturb-label, h1, .pronouns, .name-block, .tag, .badges, .works-empty, .works-col-label';
 
   function makeDraggable(box) {
-    let dragging = false;
-    let startX = 0, startY = 0, tx = 0, ty = 0;
-    let rafId = null;
-
+    let dragging = false, startX = 0, startY = 0, tx = 0, ty = 0, rafId = null;
     box.style.position = 'relative';
     box.style.willChange = 'transform';
     box.style.cursor = 'grab';
 
     box.addEventListener('mousedown', function(e) {
-      if (e.button !== 0) return;
-      if (e.target.closest(EXCLUDE)) return;
+      if (e.button !== 0 || e.target.closest(EXCLUDE)) return;
       dragging = true;
       startX = e.clientX - tx;
       startY = e.clientY - ty;
