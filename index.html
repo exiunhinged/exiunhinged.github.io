@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>exi</title>
-<meta name="description" content="exi, scholar of Dorktown. Short books, shorter games, and a very bored person.">
+<title>Exi</title>
+<meta name="description" content="Exi and his Manifest">
 <meta name="theme-color" content="#14072a">
 <meta name="color-scheme" content="dark">
 <meta name="mobile-web-app-capable" content="yes">
@@ -12,12 +12,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="data:image/x-icon;base64,AAABAAEAEBAAAAEACABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAB25f8AYoOiAHjo/wCA6fAAmKi+AMjV4ACB9/8A///5AIP6/wCA2OIAiP3/AHjj8QCX7v8Amuv/AKDl/wCj4v8AtND/AMa+/wCA8PQAzrX/ANKy/wDaqf8A2Kz/AN2m/wDgo/8Ag5+3AOGj/wC8vM0AgNLjAHK7zABWiqcAcMfVAGnK8ABlr8QAkLPGAGbM/wB0094AXJawAJO3yQBq0v8A7v+0AInu+ABja5MAbtj/AL+x9QBy3v8AkPP+AGKmvACG3+cAguHtAKzY/gB+6/AAfPD/AH7z/wBVhaMAhv//AIn8/wCM+f8AkfP/AI35/wBipr0AlfD/AKHk/wCm3v8A///HAKzY/wCv1f8AstL/ALjM/wC+xv8A0dHGAFuVrwD//+IA0rH/ANC0/wBp0f4Az8/bANir/wBptskA3qX/ANyo/wDhov8A///0AFV4oQB32uMAbL7PANbf5wB85uwAZK3BAGbJ+QBjiacAU4/CAExwlACv1P4AjrHEALrI/gBTcJQAxrz+AH7y/wD///YAgvj/AP///wB72uUAX6G6AFSEowCF/v8Ahv7/AIf+/wBy3/0AkvL/AEtskgCc6f8An+b/AFiMqQBeiKYAS3OeAITn8QDCwv8Ayrn/ANat/wDaqv8A36T/ANLS3gBswtUAxcXTAElwnwB/6e8AhMa9AGbN/wB9lMEAvOfWAGfN/wCB8fUAadD/AIqUrwDs/7EAgvX4AGm5zQBt1v8AhPr+AIX9/gCK+v4AYqe8AFeLqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZWVlZWVlZXxbJwIIaQCFgGVlZWVlZUhTIIMjijQ3ZC1lZWVlZWOGiQZiK4AjLWqLZWVlRlpgXDM3Nzc1JyNLe2VlenIsFg4Mdm8KNzdsWX1lZRsJFE8PE1EXETiMC3MqZWVMHQ0+OEkaUVBtiCFnB2VlBwGBQjs3GE0/a40SXFZlZSZudxU+Nzk3a0V5Mk4lZWUZfkR1Cj1KXS5feEFXcWVlKI4xAx9DUWEcdHA3VEdlZWU8cR4vKRA6ZmgkVY8FZWVlZWVlBDCEhFg2f4JSZWVlZWVlZWVAXiKHZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" rel="icon" type="image/x-icon">
 <script>document.documentElement.classList.add('js')</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  /* GTA VI palette */
   --violet:#3B146B;
   --purple:#7B208F;
   --magenta:#C9349B;
@@ -82,7 +82,19 @@ ul{list-style:none}
 .nav-links a:hover{color:var(--yellow)}
 @media (min-width:821px){.nav{background:rgba(20,7,42,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
 
-.hero{padding:clamp(56px,14vh,140px) 0 clamp(56px,9vw,96px)}
+.hero{position:relative;padding:clamp(56px,14vh,140px) 0 clamp(56px,9vw,96px)}
+
+.sit{
+  position:absolute;
+  right:clamp(0px,3vw,32px);
+  bottom:0;
+  z-index:1;
+  display:block;
+  width:clamp(120px,26vw,300px);
+  height:auto;
+  aspect-ratio:840/1094;
+}
+@media (max-width:820px){.sit{z-index:-1;opacity:.9}}
 
 .name{
   display:block;
@@ -255,6 +267,7 @@ ul{list-style:none}
       <span class="p-label" id="pLabel">offline</span>
       <span class="p-act" id="pAct">wow such activity</span>
     </div>
+    <img class="sit" src="yanerusama.png" width="840" height="1094" alt="" decoding="async" data-crosshair-target onerror="this.remove()">
   </section>
 
   <section class="sec" id="about">
@@ -358,8 +371,8 @@ ul{list-style:none}
   </section>
 
   <footer class="foot">
-    <span>exi</span>
-    <a href="#top">Back to top</a>
+    <span>Exi ~ 2026</span>
+    <a href="#top">Back to za top</a>
   </footer>
 </main>
 
@@ -574,7 +587,6 @@ ul{list-style:none}
     });
   }
 
-  /* Copying is only allowed from the handle */
   const handle = document.getElementById('handle');
   const inHandle = n => n && handle.contains(n.nodeType === 1 ? n : n.parentNode);
   ['copy', 'cut'].forEach(type => document.addEventListener(type, e => {
